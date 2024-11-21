@@ -1,0 +1,127 @@
+---
+export async function getStaticPaths() {
+  // You'll need to pass portfolioItems when rendering this page
+  const portfolioItems = [
+    { 
+      id: "1",
+      title: "Project 1",
+      description: "Description",
+      image: "/project1.jpg",
+      link: "https://project1.com",
+      passwordProtected: false
+    }
+  ];
+
+  return portfolioItems.map(item => ({
+    params: { slug: item.id },
+    props: {
+      item: {
+        slug: item.id,
+        data: {
+          title: item.title,
+          description: item.description,
+          image: item.image,
+          link: item.link,
+          passwordProtected: item.passwordProtected
+        }
+      }
+    }
+  }));
+}
+
+interface Props {
+  item: {
+    slug: string;
+    data: {
+      title: string;
+      description: string;
+      image: string;
+      link?: string;
+      passwordProtected?: boolean;
+    }
+  };
+}
+
+const { item } = Astro.props;
+const passwordProtected = item.data.passwordProtected || false;
+
+let isAuthenticated = false;
+
+if (passwordProtected) {
+  const enteredPassword = Astro.cookies.get('portfolio_access')?.value;
+  // Replace with your actual password check logic
+  isAuthenticated = enteredPassword === import.meta.env.PORTFOLIO_PASSWORD;
+}
+---
+  {passwordProtected && !isAuthenticated ? (
+    <div class="password-protection">
+      <form id="password-form">
+        <input 
+          type="password" 
+          id="password-input" 
+          placeholder="Enter password" 
+          required 
+        />
+        <button type="submit">Access Project</button>
+      </form>
+      <p id="error-message" class="hidden text-red-500">Incorrect password</p>
+    </div>
+  ) : (
+    <div class="portfolio-item-detail">
+      <h1>{item.data.title}</h1>
+      <img src={item.data.image} alt={item.data.title} />
+      <p>{item.data.description}</p>
+      {item.data.link && (
+        <a href={item.data.link} target="_blank" rel="noopener noreferrer">
+          View Project
+        </a>
+      )}
+    </div>
+  )}
+
+  {passwordProtected && !isAuthenticated && (
+    <script is:inline>
+      document.getElementById('password-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const passwordInput = document.getElementById('password-input');
+        const errorMessage = document.getElementById('error-message');
+
+        try {
+          const response = await fetch('/api/validate-password', {
+            method: 'POST',
+            body: JSON.stringify({ password: passwordInput.value }),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+
+          if (response.ok) {
+            document.cookie = 'portfolio_access=' + passwordInput.value + '; path=/; max-age=3600';
+            window.location.reload();
+          } else {
+            errorMessage?.classList.remove('hidden');
+          }
+        } catch (error) {
+          errorMessage?.classList.remove('hidden');
+        }
+      });
+    </script>
+  )}
+
+<style>
+  .portfolio-item-detail {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .password-protection {
+    max-width: 300px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .hidden {
+    display: none;
+  }
+</style>

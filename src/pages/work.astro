@@ -1,0 +1,109 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const portfolioItems = [
+    {
+        id: "1",
+        title: "Project 1",
+        description: "Description",
+        image: "/project1.jpg",
+        link: "https://project1.com",
+        passwordProtected: false,
+    },
+    {
+        id: "2",
+        title: "Project 2",
+        description: "Another Description",
+        image: "/project2.jpg",
+        link: "https://project2.com",
+        passwordProtected: false,
+    },
+];
+
+const title = "Tim Hilton - Work";
+---
+
+<Layout title={title}>
+    <section class="container">
+        <h2><span transition:name="fullName">Work</span></h2>
+        <div class="portfolio-grid">
+            {
+                portfolioItems.map((item, index) => (
+                    <a
+                        href={`/work/${item.id}`}
+                        class="portfolio-item"
+                        style={`--delay: ${index * 0.2}s`}
+                        transition:name={`portfolio-item-${item.id}`}
+                        transition:animate="slide"
+                    >
+                        <img
+                            src={item.image}
+                            alt={item.title}
+                            transition:name={`portfolio-image-${item.id}`}
+                        />
+                        <h3 transition:name={`portfolio-title-${item.id}`}>
+                            {item.title}
+                        </h3>
+                        <p transition:name={`portfolio-description-${item.id}`}>
+                            {item.description}
+                        </p>
+                    </a>
+                ))
+            }
+        </div>
+    </section>
+</Layout>
+
+<style>
+    .container {
+        width: 75vw;
+        margin: 51px auto 0;
+        min-height: max-content;
+        height: calc(100vh - 99px);
+    }
+
+    h2 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 24px;
+    }
+
+    .portfolio-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 24px;
+    }
+
+    .portfolio-item {
+        border: 1px solid #ddd;
+        padding: 16px;
+        text-align: center;
+        text-decoration: none;
+        color: inherit;
+        opacity: 0;
+        transform: translateX(100px);
+        animation: slideIn 0.3s ease-out forwards;
+        animation-delay: var(--delay, 0s);
+    }
+
+    @keyframes slideIn {
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .portfolio-item:hover {
+        transform: scale(1.05);
+    }
+
+    .portfolio-item img {
+        max-width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .portfolio-item h3 {
+        margin: 12px 0;
+    }
+</style>

@@ -1,0 +1,79 @@
+---
+import Icon from './Icon.astro';
+
+const icons = [
+    {
+        name: 'github',
+        link: 'https://github.com/timhilton',
+        aria: 'link to github, opens in new tab'
+    },
+    {
+        name: 'linkedin',
+        link: 'https://www.linkedin.com/in/timhiltontech/',
+        aria: 'link to linkedin, opens in new tab'
+    },
+    {
+        name: 'spotify',
+        link: 'https://open.spotify.com/user/timhilton79?si=b43fa44a6b2a4352',
+        aria: 'link to spotify, opens in new tab for you to rock out!'
+    }
+]
+---
+<style>
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      width: calc(100% - 48px);
+      color: var(--text);
+      margin-inline-start: 24px;
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+        justify-content: center;
+        height: 10rem;
+      }
+    }
+
+    .social {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+
+        @media (max-width: 768px) {
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+    }
+
+    a {
+        width: 36px;
+        height: 36px;
+    }
+
+    .footer-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    p {
+        line-height: 1;
+        margin: 0;
+        margin-inline-end: 24px;
+    }
+</style>
+
+<footer>
+    <div class="footer-content">
+        <p>&#169; {new Date().getFullYear()} Tim Hilton</p>
+        <div class="social">
+            {icons.map((icon) => <a href={icon.link} target="_blank" aria-label={icon.aria}><Icon icon={icon.name}/></a>)}
+        </div>
+    </div>
+</footer>
