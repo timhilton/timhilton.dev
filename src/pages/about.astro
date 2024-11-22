@@ -3,8 +3,18 @@ import Layout from "../layouts/Layout.astro";
 import { Image } from "astro:assets";
 import me from "../images/tim.jpg";
 import { fade } from "astro:transitions";
+import { contentfulClient } from "../lib/contentful";
+import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
+import type { AboutContent } from "../lib/contentful";
 
-const title = "Tim Hilton - About"
+const title = "Tim Hilton - About";
+
+const entries = await contentfulClient.getEntries<AboutContent>({
+    content_type: "home",
+});
+
+const { about } = entries.items[0].fields;
+const elevatorPitchHtml = documentToHtmlString(about);
 ---
 
 <Layout title={title}>
@@ -14,38 +24,16 @@ const title = "Tim Hilton - About"
                 <Image src={me} alt="Tim Hilton" />
             </div>
             <div
-            class="content"
-            transition:animate={fade({ duration: "0.5s" })}
+                class="content"
+                transition:animate={fade({ duration: "0.5s" })}
             >
-                <h2>I'm <span transition:name="fullName" transition:persist="fullName">Tim Hilton</span></h2>
-                <p>
-                    I am a dynamic professional with a background in web
-                    engineering, specializing in <span transition:name="frontend">Front End</span> Development. With
-                    over nine years of experience, I excel in crafting
-                    responsive, accessible, and user-centric websites and
-                    applications. I bring a proven track record of leading
-                    development teams, fostering collaboration across diverse
-                    functions, and adeptly managing project timelines and
-                    budgets.
-                    
-                    I have worked at agencies such as VaynerMedia and Elephant, creating award-winning web
-                    experiences. Beyond my technical expertise, I
-                    have sales skills, honed through experiences in the music
-                    departments of top talent agencies, such as Agency for the Performing Arts and ICM.  I significantly strengthen client
-                    relationships and contributing to project
-                    success.
-                    
-                    When not immersed in my professional life, I spend
-                    my time with my wife and two girls. I am also an
-                    accomplished musician, playing piano, guitar, and bass, and
-                    having performed in numerous bands. On a different note, I
-                    am an avid runner, having run in the Chicago and New York
-                    Marathons, along with numerous half marathons. In combining
-                    my tech skills, sales savvy from top talent agencies, and a
-                    love for crafting standout web experiences, I bring a
-                    commitment to excellence and innovation to everything I do,
-                    whether in code or in life.
-                </p>
+                <h2>
+                    I'm <span
+                        transition:name="fullName"
+                        transition:persist="fullName">Tim Hilton</span
+                    >
+                </h2>
+                <p set:html={elevatorPitchHtml}></p>
             </div>
         </div>
     </main>

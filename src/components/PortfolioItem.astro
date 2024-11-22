@@ -1,127 +1,377 @@
 ---
-export async function getStaticPaths() {
-  // You'll need to pass portfolioItems when rendering this page
-  const portfolioItems = [
-    { 
-      id: "1",
-      title: "Project 1",
-      description: "Description",
-      image: "/project1.jpg",
-      link: "https://project1.com",
-      passwordProtected: false
-    }
-  ];
-
-  return portfolioItems.map(item => ({
-    params: { slug: item.id },
-    props: {
-      item: {
-        slug: item.id,
-        data: {
-          title: item.title,
-          description: item.description,
-          image: item.image,
-          link: item.link,
-          passwordProtected: item.passwordProtected
-        }
-      }
-    }
-  }));
-}
-
+// src/components/PortfolioItem.astro
+import Image from "astro/components/Image.astro";
 interface Props {
-  item: {
-    slug: string;
-    data: {
-      title: string;
-      description: string;
-      image: string;
-      link?: string;
-      passwordProtected?: boolean;
-    }
-  };
+  project: string;
+  description: string;
+  slug: string;
+  tech: string[];
+  role: string;
+  demoUrl: string;
+  imageUrl: string;
+  index: number;
+  isProtected?: boolean;
+  password?: string;
 }
 
-const { item } = Astro.props;
-const passwordProtected = item.data.passwordProtected || false;
-
-let isAuthenticated = false;
-
-if (passwordProtected) {
-  const enteredPassword = Astro.cookies.get('portfolio_access')?.value;
-  // Replace with your actual password check logic
-  isAuthenticated = enteredPassword === import.meta.env.PORTFOLIO_PASSWORD;
-}
+const {
+  project,
+  description,
+  slug,
+  tech,
+  role,
+  demoUrl,
+  imageUrl,
+  index,
+  isProtected,
+  password,
+} = Astro.props;
 ---
-  {passwordProtected && !isAuthenticated ? (
-    <div class="password-protection">
-      <form id="password-form">
-        <input 
-          type="password" 
-          id="password-input" 
-          placeholder="Enter password" 
-          required 
-        />
-        <button type="submit">Access Project</button>
-      </form>
-      <p id="error-message" class="hidden text-red-500">Incorrect password</p>
-    </div>
-  ) : (
-    <div class="portfolio-item-detail">
-      <h1>{item.data.title}</h1>
-      <img src={item.data.image} alt={item.data.title} />
-      <p>{item.data.description}</p>
-      {item.data.link && (
-        <a href={item.data.link} target="_blank" rel="noopener noreferrer">
-          View Project
-        </a>
-      )}
-    </div>
-  )}
 
-  {passwordProtected && !isAuthenticated && (
-    <script is:inline>
-      document.getElementById('password-form')?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const passwordInput = document.getElementById('password-input');
-        const errorMessage = document.getElementById('error-message');
+<div
+  class="portfolio-wrapper"
+  data-index={index}
+  data-protected={isProtected}
+  data-password={password}
+>
+  <button class="portfolio-item" style={`--delay: ${index * 0.2}s`}>
+    <Image src={imageUrl} alt={project} width="512" height="512" />
+    <h3>{project}</h3>
+  </button>
 
-        try {
-          const response = await fetch('/api/validate-password', {
-            method: 'POST',
-            body: JSON.stringify({ password: passwordInput.value }),
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          });
-
-          if (response.ok) {
-            document.cookie = 'portfolio_access=' + passwordInput.value + '; path=/; max-age=3600';
-            window.location.reload();
-          } else {
-            errorMessage?.classList.remove('hidden');
-          }
-        } catch (error) {
-          errorMessage?.classList.remove('hidden');
+  <div class="modal-container">
+    <div class="blur-overlay"></div>
+    <div class="modal">
+      <div class="modal-content">
+        <button type="button" class="close-button" aria-label="Close modal">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        {
+          isProtected ? (
+            <div class="password-form">
+              <h4>{project}</h4>
+              <p>This project requires a password to view.</p>
+              <div class="password-input-group">
+                <input
+                  type="password"
+                  placeholder="Enter password"
+                  class="password-input"
+                />
+                <button class="button primary verify-password">
+                  View Project
+                </button>
+              </div>
+              <p class="error-message" style="display: none;">
+                Incorrect password
+              </p>
+            </div>
+          ) : null
         }
-      });
-    </script>
-  )}
+
+        <div class="project-details" style={isProtected ? "display: none" : ""}>
+          <h2>{project}</h2>
+          <p class="description">{description}</p>
+
+          {
+            tech && (
+              <div class="tech-stack">
+                <h5>Technologies</h5>
+                <div class="tech-tags">
+                  {tech.map((item) => (
+                    <span class="tech-tag">{item}</span>
+                  ))}
+                </div>
+              </div>
+            )
+          }
+
+          {
+            role && (
+              <div class="role">
+                <h5>Role</h5>
+                <p>{role}</p>
+              </div>
+            )
+          }
+
+          <video
+            class="scroll"
+            data-speed="1.5"
+            src={demoUrl}
+            autoplay
+            loop
+            muted
+            playsinline
+          >
+            <source src={demoUrl} type="video/mp4" />
+          </video>
+
+          <div class="actions">
+            {
+              slug && (
+                <a href={`/work/${slug}`} class="button secondary">
+                  Case Study
+                </a>
+              )
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <style>
-  .portfolio-item-detail {
-    max-width: 800px;
-    margin: 0 auto;
+  .portfolio-item {
+    border: 1px solid #8e8d8d;
+    background-color: var(--background-color);
+    border-radius: 16px;
+    padding: 16px;
     text-align: center;
+    text-decoration: none;
+    color: inherit;
+    opacity: 0;
+    transform: translateX(100px);
+    animation: slideIn 0.3s ease-out forwards;
+    animation-delay: var(--delay, 0s);
   }
 
-  .password-protection {
-    max-width: 300px;
-    margin: 0 auto;
-    text-align: center;
+  .portfolio-item img {
+    max-width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
   }
 
-  .hidden {
+  .portfolio-item h3 {
+    margin: 12px 0;
+  }
+
+  .modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+  }
+
+  .modal-container[data-active="true"] {
+    display: flex;
+  }
+
+  .blur-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .modal {
+    position: relative;
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    background: var(--background-color);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    overflow: scroll;
+    z-index: 9999;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: all 0.2s ease;
+  }
+
+  .modal-container[data-active="true"] .modal {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .modal-content {
+    /* max-height: 90vh;
+    overflow-y: auto; */
+    padding: 3rem;
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: max-content;
+    min-height: 100dvh;
+  }
+  .close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem;
+    border-radius: 50%;
+    border: none;
+    background: none;
+    cursor: pointer;
+    line-height: 0;
+    transition: background-color 0.2s ease;
+
+    svg {
+      stroke: var(--text-color);
+    }
+  }
+
+  .close-button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .password-form {
+    text-align: center;
+    align-self: center;
+    margin: 0 auto;
+  }
+
+  .password-input-group {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1rem 0;
+  }
+
+  .password-input {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid var(--text-color);
+    border-radius: 0.5rem;
+    background: var(--bg-color);
+    color: var(--text-color);
+  }
+
+  .error-message {
+    color: #dc2626;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+  }
+
+  .project-details {
+    position: relative;
+    width: 75%;
+    margin: 0 auto;
+  }
+  .tech-stack,
+  .role {
+    margin: 1.5rem 0;
+  }
+
+  .tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .tech-tag {
+    background: #8e8d8d;
+    color: var(--bg-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+  }
+
+  .actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  video {
+    width: 100%;
   }
 </style>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const portfolioItems = document.querySelectorAll(".portfolio-item");
+    const modalContainers = document.querySelectorAll(".modal-container");
+
+    function closeAllModals() {
+      modalContainers.forEach((container) => {
+        container.setAttribute("data-active", "false");
+      });
+      document.body.style.overflow = "";
+    }
+
+    portfolioItems.forEach((item, index) => {
+      const modalContainer = modalContainers[index];
+      const blurOverlay = modalContainer.querySelector(".blur-overlay");
+      const isProtected =
+        modalContainer
+          .closest(".portfolio-wrapper")
+          ?.getAttribute("data-protected") !== null
+          ? true
+          : false;
+      const correctPassword =
+        modalContainer.closest(".portfolio-wrapper").dataset.password;
+
+      // Open modal
+      item.addEventListener("click", (e) => {
+        e.preventDefault();
+        closeAllModals();
+        modalContainer.setAttribute("data-active", "true");
+        document.body.style.overflow = "hidden";
+      });
+
+      // Close on overlay click
+      const closeButton = modalContainer.querySelector(".close-button");
+      closeButton.addEventListener("click", () => {
+        closeAllModals();
+      });
+
+      // Password verification
+      if (isProtected === true) {
+        const projectDetails = modalContainer.querySelector(".project-details");
+        const verifyButton = modalContainer.querySelector(".verify-password");
+        const passwordInput = modalContainer.querySelector(".password-input");
+        const passwordForm = modalContainer.querySelector(".password-form");
+        const errorMessage = modalContainer.querySelector(".error-message");
+
+        projectDetails.style.display = "none";
+
+        verifyButton.addEventListener("click", () => {
+          if (passwordInput.value === correctPassword) {
+            passwordForm.style.display = "none";
+            projectDetails.style.display = "block";
+            errorMessage.style.display = "none";
+          } else {
+            errorMessage.style.display = "block";
+            passwordInput.value = "";
+          }
+        });
+        // Allow enter key to submit password
+        passwordInput.addEventListener("keypress", (e) => {
+          if (e.key === "Enter") {
+            verifyButton.click();
+          }
+        });
+      }
+    });
+
+    // Escape key handler
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeAllModals();
+      }
+    });
+  });
+</script>

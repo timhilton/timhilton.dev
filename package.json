@@ -13,9 +13,11 @@
     "@astrojs/check": "^0.9.4",
     "@astrojs/preact": "^3.5.3",
     "@astrojs/react": "^3.6.2",
+    "@contentful/rich-text-html-renderer": "^17.0.0",
     "@storyblok/astro": "^5.0.2",
     "@storyblok/js": "^3.1.7",
     "astro": "^4.16.13",
+    "contentful": "^11.2.3",
     "lucide-react": "^0.460.0",
     "preact": "^10.24.3",
     "typescript": "^5.6.3"
