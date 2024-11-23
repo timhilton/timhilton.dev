@@ -4,22 +4,22 @@ import Layout from "../layouts/Layout.astro";
 import { contentfulClient } from "../lib/contentful";
 import PortfolioItem from "../components/PortfolioItem.astro";
 
-const entries = await contentfulClient.getEntries<PortfolioItem>({
+const entries = await contentfulClient.getEntries({
     content_type: "portfolioItem",
 });
 
 let items = entries.items.map((item) => {
+    const fields = item.fields;
     return {
-        project: item.fields.project,
-        description: item.fields.description,
-        slug: item.fields.slug,
-        tech: item.fields.tech,
-        role: item.fields.role,
-        demoUrl: item.fields.demoUrl,
-        imageUrl: item.fields.imageUrl,
-        caseStudyMedia: item.fields.caseStudyMedia,
-        isProtected: item.fields.isProtected,
-        password: item.fields.password,
+        project: fields.project || "",
+        description: fields.description || "",
+        slug: fields.slug || "",
+        tech: Array.isArray(fields.tech) ? fields.tech : [],
+        role: fields.role || "",
+        demoUrl: fields.demoUrl || "",
+        imageUrl: fields.imageUrl || "",
+        isProtected: Boolean(fields.isProtected),
+        password: fields.password || "",
     };
 });
 
