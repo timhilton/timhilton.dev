@@ -15,7 +15,7 @@
         padding-bottom: 5em;
         width: calc(100% - 48px);
         max-width: 100%;
-        margin-top: 1rem;
+        margin-top: 4rem;
     }
 
     @media (max-width: 400px) {
@@ -73,6 +73,7 @@ input[name='email'][value='']:invalid:focus {
 
 label {
     font-family: Roboto, 'Helvetica Neue', sans-serif;
+    color: #080808;
     align-items: center;
     display: flex;
     font-size: 1em;
@@ -90,7 +91,7 @@ input:valid~label,
 input[value]:not([value=''])~label,
 textarea:focus~label,
 textarea:valid~label {
-    color: #080808;
+    color: var(--text-color);
     font-size: 0.9em;
     font-weight: 600;
     top: -2.75em;
