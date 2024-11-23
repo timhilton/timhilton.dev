@@ -33,7 +33,7 @@ const elevatorPitchHtml = documentToHtmlString(about);
                         transition:persist="fullName">Tim Hilton</span
                     >
                 </h2>
-                <p set:html={elevatorPitchHtml}></p>
+                <p set:html={elevatorPitchHtml} />
             </div>
         </div>
     </main>
@@ -42,8 +42,12 @@ const elevatorPitchHtml = documentToHtmlString(about);
 <style>
     main {
         min-height: max-content;
-        height: calc(100vh - 48px);
+        height: calc(100dvh - 48px);
         padding: 8rem 2rem 2rem;
+
+        @media screen and (max-width: 768px) {
+            padding: 5rem 2rem 2rem;
+        }
     }
     .hero-container {
         width: 75vw;
@@ -51,6 +55,10 @@ const elevatorPitchHtml = documentToHtmlString(about);
         grid-template-columns: max-content 1fr;
         gap: 24px;
         margin: 0 auto;
+
+        @media screen and (max-width: 768px) {
+            grid-template-columns: 1fr;
+        }
     }
 
     .image-wrapper {
@@ -60,6 +68,11 @@ const elevatorPitchHtml = documentToHtmlString(about);
         border: 4px solid #8e8d8d;
         border-radius: 2rem;
         overflow: hidden;
+
+        @media screen and (max-width: 768px) {
+            width: 30vw;
+            justify-self: center;
+        }
     }
     .image-wrapper img {
         width: 100%;

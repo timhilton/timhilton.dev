@@ -46,6 +46,10 @@ import { fade } from "astro:transitions";
 		border: 4px solid #8e8d8d;
 		border-radius: 2rem;
 		overflow: hidden;
+
+		@media screen and (max-width: 768px) {
+			width: 74vw;
+		}
 	}
 
 	.image-wrapper img {
@@ -58,6 +62,11 @@ import { fade } from "astro:transitions";
 		flex-direction: column;
 		gap: 1.5rem;
 		align-items: flex-end;
+
+		@media screen and (max-width: 768px) {
+			align-items: center;
+			
+		}
 	}
 
 	h1 {
@@ -68,7 +77,6 @@ import { fade } from "astro:transitions";
 
 	p {
 		font-size: 1.25rem;
-
 		margin: 0;
 	}
 

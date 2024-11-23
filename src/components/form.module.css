@@ -10,11 +10,20 @@
     max-width: 692px;
     margin: 48px auto;
 
-    @media (max-width: 734px) {
+    @media (max-width: 768px) {
         height: 70%;
         padding-bottom: 5em;
         width: calc(100% - 48px);
         max-width: 100%;
+        margin-top: 1rem;
+    }
+
+    @media (max-width: 400px) {
+        margin-top: 3rem;
+    }
+
+    @media (max-width: 375px) {
+        margin-top: 7rem;
     }
 }
 
