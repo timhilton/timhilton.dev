@@ -14,8 +14,7 @@ import { fade } from "astro:transitions";
 			>
 				<h1 transition:name="fullName">Tim Hilton</h1>
 				<p>
-					crafting <span transition:name="frontend">frontend</span> experiences
-					for over a decade
+					crafting frontend experiences for over a decade
 				</p>
 			</div>
 			<div class="image-wrapper" transition:name="image">
@@ -65,7 +64,6 @@ import { fade } from "astro:transitions";
 
 		@media screen and (max-width: 768px) {
 			align-items: center;
-			
 		}
 	}
 
@@ -78,6 +76,10 @@ import { fade } from "astro:transitions";
 	p {
 		font-size: 1.25rem;
 		margin: 0;
+
+		@media screen and (max-width: 768px) {
+			width: 25ch;
+		}
 	}
 
 	@media (max-width: 768px) {
