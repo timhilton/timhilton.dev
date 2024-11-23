@@ -42,11 +42,12 @@ const elevatorPitchHtml = documentToHtmlString(about);
 <style>
     main {
         min-height: max-content;
-        /* height: calc(100dvh - 48px); */
+        height: calc(100dvh - 48px);
         padding: 8rem 2rem 2rem;
 
         @media screen and (max-width: 768px) {
             padding: 5rem 2rem 2rem;
+            height: max-content;
         }
     }
     .hero-container {
