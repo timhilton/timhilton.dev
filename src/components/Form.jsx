@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import styles from './form.module.css';
 import { useState } from 'preact/hooks';
 

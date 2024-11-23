@@ -301,11 +301,28 @@ const {
 </style>
 
 <script>
-  document.addEventListener("astro:page-load", () => {
-    const portfolioItems = document.querySelectorAll(".portfolio-item");
-    const modalContainers = document.querySelectorAll(".modal-container");
+  // Define interfaces for better type safety
+  interface ModalContainer extends HTMLElement {
+    setAttribute(name: string, value: string): void;
+    querySelector<E extends Element = Element>(selectors: string): E | null;
+    closest(selector: string): Element | null;
+  }
 
-    function closeAllModals() {
+  interface PasswordElements {
+    projectDetails: HTMLElement | null;
+    verifyButton: HTMLElement | null;
+    passwordInput: HTMLInputElement | null;
+    passwordForm: HTMLElement | null;
+    errorMessage: HTMLElement | null;
+  }
+
+  document.addEventListener("astro:page-load", () => {
+    const portfolioItems =
+      document.querySelectorAll<HTMLElement>(".portfolio-item");
+    const modalContainers =
+      document.querySelectorAll<ModalContainer>(".modal-container");
+
+    function closeAllModals(): void {
       modalContainers.forEach((container) => {
         container.setAttribute("data-active", "false");
       });
@@ -314,61 +331,75 @@ const {
 
     portfolioItems.forEach((item, index) => {
       const modalContainer = modalContainers[index];
-      const blurOverlay = modalContainer.querySelector(".blur-overlay");
-      const isProtected =
-        modalContainer
-          .closest(".portfolio-wrapper")
-          ?.getAttribute("data-protected") !== null
-          ? true
-          : false;
-      const correctPassword =
-        modalContainer.closest(".portfolio-wrapper").dataset.password;
+      if (!modalContainer) return;
+
+      const wrapper = modalContainer.closest(".portfolio-wrapper");
+      const isProtected = wrapper?.getAttribute("data-protected") !== null;
+      const correctPassword = wrapper?.getAttribute("data-password") || "";
 
       // Open modal
-      item.addEventListener("click", (e) => {
+      item.addEventListener("click", (e: Event) => {
         e.preventDefault();
         closeAllModals();
         modalContainer.setAttribute("data-active", "true");
         document.body.style.overflow = "hidden";
       });
 
-      // Close on overlay click
-      const closeButton = modalContainer.querySelector(".close-button");
-      closeButton.addEventListener("click", () => {
+      // Close on button click
+      const closeButton =
+        modalContainer.querySelector<HTMLElement>(".close-button");
+      closeButton?.addEventListener("click", () => {
         closeAllModals();
       });
 
       // Password verification
-      if (isProtected === true) {
-        const projectDetails = modalContainer.querySelector(".project-details");
-        const verifyButton = modalContainer.querySelector(".verify-password");
-        const passwordInput = modalContainer.querySelector(".password-input");
-        const passwordForm = modalContainer.querySelector(".password-form");
-        const errorMessage = modalContainer.querySelector(".error-message");
+      if (isProtected) {
+        const elements: PasswordElements = {
+          projectDetails:
+            modalContainer.querySelector<HTMLElement>(".project-details"),
+          verifyButton:
+            modalContainer.querySelector<HTMLElement>(".verify-password"),
+          passwordInput:
+            modalContainer.querySelector<HTMLInputElement>(".password-input"),
+          passwordForm:
+            modalContainer.querySelector<HTMLElement>(".password-form"),
+          errorMessage:
+            modalContainer.querySelector<HTMLElement>(".error-message"),
+        };
 
-        projectDetails.style.display = "none";
+        if (elements.projectDetails) {
+          elements.projectDetails.style.display = "none";
+        }
 
-        verifyButton.addEventListener("click", () => {
-          if (passwordInput.value === correctPassword) {
-            passwordForm.style.display = "none";
-            projectDetails.style.display = "block";
-            errorMessage.style.display = "none";
+        elements.verifyButton?.addEventListener("click", () => {
+          if (elements.passwordInput?.value === correctPassword) {
+            if (elements.passwordForm)
+              elements.passwordForm.style.display = "none";
+            if (elements.projectDetails)
+              elements.projectDetails.style.display = "block";
+            if (elements.errorMessage)
+              elements.errorMessage.style.display = "none";
           } else {
-            errorMessage.style.display = "block";
-            passwordInput.value = "";
+            if (elements.errorMessage)
+              elements.errorMessage.style.display = "block";
+            if (elements.passwordInput) elements.passwordInput.value = "";
           }
         });
+
         // Allow enter key to submit password
-        passwordInput.addEventListener("keypress", (e) => {
-          if (e.key === "Enter") {
-            verifyButton.click();
-          }
-        });
+        elements.passwordInput?.addEventListener(
+          "keypress",
+          (e: KeyboardEvent) => {
+            if (e.key === "Enter") {
+              elements.verifyButton?.click();
+            }
+          },
+        );
       }
     });
 
     // Escape key handler
-    document.addEventListener("keydown", (e) => {
+    document.addEventListener("keydown", (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         closeAllModals();
       }
