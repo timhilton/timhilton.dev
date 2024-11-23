@@ -1,25 +1,24 @@
 ---
-import Image from "astro/components/Image.astro";
 import Layout from "../layouts/Layout.astro";
-import { contentfulClient } from "../lib/contentful";
+import { contentfulClient, type PortfolioFields } from "../lib/contentful";
 import PortfolioItem from "../components/PortfolioItem.astro";
 
-const entries = await contentfulClient.getEntries({
+const entries = await contentfulClient.getEntries<PortfolioFields>({
     content_type: "portfolioItem",
 });
 
 let items = entries.items.map((item) => {
     const fields = item.fields;
     return {
-        project: fields.project || "",
-        description: fields.description || "",
-        slug: fields.slug || "",
+        project: String(fields.project || ""),
+        description: String(fields.description || ""),
+        slug: String(fields.url || ""),
         tech: Array.isArray(fields.tech) ? fields.tech : [],
-        role: fields.role || "",
-        demoUrl: fields.demoUrl || "",
-        imageUrl: fields.imageUrl || "",
+        role: String(fields.role || ""),
+        demoUrl: String(fields.demoUrl || ""),
+        imageUrl: String(fields.imageUrl || ""),
         isProtected: Boolean(fields.isProtected),
-        password: fields.password || "",
+        password: String(fields.password || ""),
     };
 });
 

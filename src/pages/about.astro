@@ -5,11 +5,11 @@ import me from "../images/tim.jpg";
 import { fade } from "astro:transitions";
 import { contentfulClient } from "../lib/contentful";
 import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
-import type { AboutContent } from "../lib/contentful";
+import type { AboutFields } from "../lib/contentful";
 
 const title = "Tim Hilton - About";
 
-const entries = await contentfulClient.getEntries<AboutContent>({
+const entries = await contentfulClient.getEntries<AboutFields>({
     content_type: "home",
 });
 
@@ -33,7 +33,7 @@ const elevatorPitchHtml = documentToHtmlString(about);
                         transition:persist="fullName">Tim Hilton</span
                     >
                 </h2>
-                <p set:html={elevatorPitchHtml} />
+                <div set:html={elevatorPitchHtml} />
             </div>
         </div>
     </main>

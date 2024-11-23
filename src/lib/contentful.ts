@@ -1,20 +1,24 @@
 import * as contentful from 'contentful';
-import { type EntryFieldTypes } from "contentful";
 
-export interface AboutContent {
+import type { Entry, EntryFieldTypes } from "contentful";
+
+export interface AboutFields {
   contentTypeId: "home",
   fields: {
     elevatorPitch: EntryFieldTypes.Text
+    about: EntryFieldTypes.RichText
   }
 }
 
-export interface PortfolioItem {
+export type AboutContent = Entry<AboutFields>
+
+export interface PortfolioFields {
   contentTypeId: "portfolioItem",
   fields: {
     project: EntryFieldTypes.Text,
     description: EntryFieldTypes.Text,
     url: EntryFieldTypes.Text,
-    tech: EntryFieldTypes.Array<EntryFieldTypes.Text>,
+    tech: EntryFieldTypes.Text[],
     role: EntryFieldTypes.Text,
     demoUrl: EntryFieldTypes.Text,
     imageUrl: EntryFieldTypes.Text,
