@@ -215,6 +215,10 @@ const {
     width: 100%;
     height: max-content;
     min-height: 100dvh;
+
+    @media screen and (max-width: 768px) {
+      padding: 3rem 0 3rem;
+    }
   }
   .close-button {
     position: absolute;
@@ -268,6 +272,10 @@ const {
     position: relative;
     width: 75%;
     margin: 0 auto;
+
+    @media screen and (max-width: 768px) {
+      width: 100%;
+    }
   }
   .tech-stack,
   .role {
@@ -293,6 +301,16 @@ const {
     display: flex;
     gap: 1rem;
     margin-top: 2rem;
+  }
+
+  h2,
+  .description,
+  .tech-stack,
+  .role,
+  .actions {
+    @media screen and (max-width: 768px) {
+      padding: 0 3rem 0 ;
+    }
   }
 
   video {
