@@ -52,12 +52,6 @@ async function syncContentfulToJson() {
         password?: string;
       };
 
-      // // Ensure all required fields are defined
-      // if (!fields.description || !fields.tech || !fields.role || !fields.demoUrl || !fields.imageUrl || !fields.project) {
-      //   console.warn(`Warning: Missing required fields for a project`);
-      //   return;
-      // }
-
       const projectData: ProjectData = {
         description: fields.description ?? '', // Use empty string if missing
         tech: fields.tech ?? [], // Use empty array if missing
