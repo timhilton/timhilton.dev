@@ -1,6 +1,9 @@
 import * as contentful from 'contentful';
+import * as dotenv from 'dotenv';
 
 import type { Entry, EntryFieldTypes } from "contentful";
+
+dotenv.config();
 
 export interface AboutFields {
   contentTypeId: "home",
@@ -36,9 +39,9 @@ export interface BlogItem {
 }
 
 export const contentfulClient = contentful.createClient({
-  space: import.meta.env.CONTENTFUL_SPACE_ID,
-  accessToken: import.meta.env.DEV
-    ? import.meta.env.CONTENTFUL_PREVIEW_TOKEN
-    : import.meta.env.CONTENTFUL_DELIVERY_TOKEN,
-  host: import.meta.env.DEV ? "preview.contentful.com" : "cdn.contentful.com",
+  space: process.env.VITE_CONTENTFUL_SPACE_ID!,
+  accessToken: process.env.NODE_ENV === 'development'
+    ? process.env.VITE_CONTENTFUL_PREVIEW_TOKEN!
+    : process.env.VITE_CONTENTFUL_DELIVERY_TOKEN!,
+  host: process.env.NODE_ENV === 'development' ? "preview.contentful.com" : "cdn.contentful.com",
 });

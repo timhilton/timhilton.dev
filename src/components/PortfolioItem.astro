@@ -1,42 +1,44 @@
 ---
 // src/components/PortfolioItem.astro
 import Image from "astro/components/Image.astro";
+// import type { Project, PublicProject, ProtectedProject } from "../lib/projects";
+
 interface Props {
-  project: string;
+  id: string;
+  title: string;
   description: string;
-  slug: string;
   tech: string[];
   role: string;
   demoUrl: string;
+  url?: string;
   imageUrl: string;
-  index: number;
   isProtected: boolean;
-  password: string;
+  index: number;
 }
 
 const {
-  project,
+  id,
+  title,
   description,
-  slug,
   tech,
   role,
   demoUrl,
   imageUrl,
+  url,
   index,
   isProtected,
-  password,
 } = Astro.props;
 ---
 
 <div
   class="portfolio-wrapper"
   data-index={index}
+  data-project-id={id}
   data-protected={isProtected}
-  data-password={password}
 >
   <button class="portfolio-item" style={`--delay: ${index * 0.2}s`}>
-    <Image src={imageUrl} alt={project} width="512" height="512" />
-    <h3>{project}</h3>
+    <Image src={imageUrl} alt={title || ""} width="512" height="512" />
+    <h3>{title}</h3>
   </button>
 
   <div class="modal-container">
@@ -59,10 +61,11 @@ const {
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
+
         {
           isProtected ? (
             <div class="password-form">
-              <h4>{project}</h4>
+              <h4>{title}</h4>
               <p>This project requires a password to view.</p>
               <div class="password-input-group">
                 <input
@@ -78,57 +81,59 @@ const {
                 Incorrect password
               </p>
             </div>
-          ) : null
-        }
+          ) : (
+            <div
+              class="project-details"
+              style={isProtected ? "display: none" : ""}
+            >
+              <h2>{title}</h2>
+              <p class="description">{description}</p>
 
-        <div class="project-details" style={isProtected ? "display: none" : ""}>
-          <h2>{project}</h2>
-          <p class="description">{description}</p>
-
-          {
-            tech && (
-              <div class="tech-stack">
-                <h5>Technologies</h5>
-                <div class="tech-tags">
-                  {tech.map((item) => (
-                    <span class="tech-tag">{item}</span>
-                  ))}
+              {tech && (
+                <div class="tech-stack">
+                  <h5>Technologies</h5>
+                  <div class="tech-tags">
+                    {tech.map((item) => (
+                      <span class="tech-tag">{item}</span>
+                    ))}
+                  </div>
                 </div>
+              )}
+
+              {role && (
+                <div class="role">
+                  <h5>Role</h5>
+                  <p>{role}</p>
+                </div>
+              )}
+
+              <video
+                class="scroll"
+                data-speed="1.5"
+                src={demoUrl}
+                autoplay
+                loop
+                muted
+                playsinline
+              >
+                <source src={demoUrl} type="video/mp4" />
+              </video>
+
+              <div class="actions">
+                {url && (
+                  <a
+                    href={url}
+                    class="button secondary"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    View Project
+                  </a>
+                )}
               </div>
-            )
-          }
-
-          {
-            role && (
-              <div class="role">
-                <h5>Role</h5>
-                <p>{role}</p>
-              </div>
-            )
-          }
-
-          <video
-            class="scroll"
-            data-speed="1.5"
-            src={demoUrl}
-            autoplay
-            loop
-            muted
-            playsinline
-          >
-            <source src={demoUrl} type="video/mp4" />
-          </video>
-
-          <div class="actions">
-            {
-              slug && (
-                <a href={`/work/${slug}`} class="button secondary">
-                  Case Study
-                </a>
-              )
-            }
-          </div>
-        </div>
+            </div>
+          )
+        }
       </div>
     </div>
   </div>
@@ -309,7 +314,7 @@ const {
   .role,
   .actions {
     @media screen and (max-width: 768px) {
-      padding: 0 3rem 0 ;
+      padding: 0 3rem 0;
     }
   }
 
@@ -334,6 +339,16 @@ const {
     errorMessage: HTMLElement | null;
   }
 
+  interface ProjectResponse {
+    title: string;
+    description: string;
+    tech: string[];
+    role: string;
+    demoUrl: string;
+    url?: string;
+    error?: string;
+  }
+
   document.addEventListener("astro:page-load", () => {
     const portfolioItems =
       document.querySelectorAll<HTMLElement>(".portfolio-item");
@@ -347,13 +362,53 @@ const {
       document.body.style.overflow = "";
     }
 
+    async function fetchProjectData(
+      projectId: string,
+      password: string,
+    ): Promise<ProjectResponse> {
+      try {
+        const response = await fetch(`/api/project/${projectId}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ password }),
+        });
+
+        // Get the response text first
+        const responseText = await response.text();
+
+        // Try to parse it as JSON
+        let data;
+        try {
+          data = JSON.parse(responseText);
+        } catch (e) {
+          throw new Error("Invalid response format");
+        }
+
+        if (!response.ok) {
+          console.error("Response not OK:", {
+            status: response.status,
+            statusText: response.statusText,
+            data,
+          });
+          throw new Error(data.error || "Invalid password");
+        }
+
+        return data;
+      } catch (error) {
+        console.error("Error in fetchProjectData:", error);
+        throw error;
+      }
+    }
+
     portfolioItems.forEach((item, index) => {
       const modalContainer = modalContainers[index];
       if (!modalContainer) return;
 
       const wrapper = modalContainer.closest(".portfolio-wrapper");
-      const isProtected = wrapper?.getAttribute("data-protected") !== null;
-      const correctPassword = wrapper?.getAttribute("data-password") || "";
+      const isProtected = wrapper?.hasAttribute("data-protected");
+      const projectId = wrapper?.getAttribute("data-project-id") || "";
 
       // Open modal
       item.addEventListener("click", (e: Event) => {
@@ -370,6 +425,8 @@ const {
         closeAllModals();
       });
 
+      const modalContent = modalContainer.querySelector('.modal-content')!;
+
       // Password verification
       if (isProtected) {
         const elements: PasswordElements = {
@@ -385,22 +442,30 @@ const {
             modalContainer.querySelector<HTMLElement>(".error-message"),
         };
 
-        if (elements.projectDetails) {
-          elements.projectDetails.style.display = "none";
-        }
+        elements.verifyButton?.addEventListener("click", async () => {
+          const password = elements.passwordInput?.value || "";
+          try {
+            const projectData = await fetchProjectData(projectId, password);
 
-        elements.verifyButton?.addEventListener("click", () => {
-          if (elements.passwordInput?.value === correctPassword) {
-            if (elements.passwordForm)
+            if (elements.passwordForm) {
               elements.passwordForm.style.display = "none";
-            if (elements.projectDetails)
+            }
+            if (elements.projectDetails) {
               elements.projectDetails.style.display = "block";
-            if (elements.errorMessage)
+            }
+            if (elements.errorMessage) {
               elements.errorMessage.style.display = "none";
-          } else {
-            if (elements.errorMessage)
+            }
+
+            // Create the project details with the fetched data
+            createProjectDetails(modalContent, projectData);
+          } catch (error) {
+            if (elements.errorMessage) {
               elements.errorMessage.style.display = "block";
-            if (elements.passwordInput) elements.passwordInput.value = "";
+            }
+            if (elements.passwordInput) {
+              elements.passwordInput.value = "";
+            }
           }
         });
 
@@ -415,6 +480,78 @@ const {
         );
       }
     });
+
+    function createProjectDetails(container: Element, data: ProjectResponse) {
+      // create container
+      const details = document.createElement("div");
+      details.classList.add("project-details");
+      container.appendChild(details);
+
+      const projectTitle = document.createElement("h2");
+      projectTitle.textContent = data.title;
+      details.appendChild(projectTitle);
+
+      // create Description
+      const descriptionEl = document.createElement("p");
+      descriptionEl.classList.add("description");
+      descriptionEl.textContent = data.description;
+      details.appendChild(descriptionEl);
+
+      // create Tech Stack
+      const techStack = document.createElement("div");
+      techStack.classList.add("tech-stack");
+
+      const techHeading = document.createElement("h5");
+      techHeading.textContent = "Technologies";
+      techStack.appendChild(techHeading);
+
+      const techTagsEl = document.createElement("p");
+      techTagsEl.classList.add("tech-tags");
+      techTagsEl.innerHTML = data.tech
+        .map((tech) => `<span class="tech-tag">${tech}</span>`)
+        .join("");
+
+      techStack.appendChild(techTagsEl);
+      details.appendChild(techStack);
+
+      //create role
+      const roleEl = document.createElement("div");
+      const roleHeading = document.createElement("h5");
+      roleHeading.textContent = "Role";
+      roleEl.appendChild(roleHeading);
+      const roleContent = document.createElement("p");
+      roleContent.classList.add("role");
+      roleContent.textContent = data.role;
+      roleEl.appendChild(roleContent);
+      details.appendChild(roleEl);
+
+      const video = document.createElement("video");
+      video.classList.add("scroll");
+      video.setAttribute("data-speed", "1.5");
+      video.setAttribute("src", data.demoUrl);
+      video.setAttribute("autoplay", "true");
+      video.setAttribute("loop", "true");
+      video.setAttribute("muted", "true");
+      video.setAttribute("playsInline", "true");
+
+      const source = document.createElement("source");
+      source.setAttribute("src", data.demoUrl);
+      source.setAttribute("type", "video/mp4");
+      video.appendChild(source);
+
+      details.appendChild(video);
+
+      if (data.url) {
+        const actionEl = document.createElement('div');
+        actionEl.classList.add('actions');
+          actionEl.innerHTML = `
+          <a href="${data.url}" class="button secondary" target="_blank" rel="noopener noreferrer">
+            View Project
+          </a>
+        `;
+        details.appendChild(actionEl);
+      }
+    }
 
     // Escape key handler
     document.addEventListener("keydown", (e: KeyboardEvent) => {
