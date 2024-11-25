@@ -1,26 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { contentfulClient, type PortfolioFields } from "../lib/contentful";
 import PortfolioItem from "../components/PortfolioItem.astro";
+import { getAllProjects } from "../lib/projects";
 
-const entries = await contentfulClient.getEntries<PortfolioFields>({
-    content_type: "portfolioItem",
-});
-
-let items = entries.items.map((item) => {
-    const fields = item.fields;
-    return {
-        project: String(fields.project || ""),
-        description: String(fields.description || ""),
-        slug: String(fields.url || ""),
-        tech: Array.isArray(fields.tech) ? fields.tech : [],
-        role: String(fields.role || ""),
-        demoUrl: String(fields.demoUrl || ""),
-        imageUrl: String(fields.imageUrl || ""),
-        isProtected: Boolean(fields.isProtected),
-        password: String(fields.password || ""),
-    };
-});
+// Load all projects with basic info
+const projects = await getAllProjects();
 
 const title = "Tim Hilton - Work";
 ---
@@ -30,12 +14,11 @@ const title = "Tim Hilton - Work";
         <h2><span transition:name="fullName">Work</span></h2>
         <div class="portfolio-grid">
             {
-                items.map((item, index) => (
+                projects.map((project, index) => (
                     <PortfolioItem
-                        {...item}
+                        {...project}
                         index={index}
-                        isProtected={item.isProtected}
-                        password={item.password}
+                        isProtected={project.isProtected}
                     />
                 ))
             }

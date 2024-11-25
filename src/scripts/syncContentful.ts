@@ -8,6 +8,7 @@ import path from 'path';
 
 // Project store types
 interface ProjectData {
+  title: string;
   description: string;
   tech: string[];
   role: string;
@@ -53,6 +54,7 @@ async function syncContentfulToJson() {
       };
 
       const projectData: ProjectData = {
+        title: fields.project ?? '',
         description: fields.description ?? '', // Use empty string if missing
         tech: fields.tech ?? [], // Use empty array if missing
         role: fields.role ?? '', // Use empty string if missing

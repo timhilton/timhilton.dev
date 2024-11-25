@@ -4,9 +4,9 @@
   "version": "0.0.1",
   "scripts": {
     "sync-contentful": "node --loader ts-node/esm src/scripts/syncContentful.ts",
-    "dev": "astro dev",
+    "dev": "npm run sync-contentful && astro dev",
     "start": "astro dev",
-    "build": "astro check && astro build",
+    "build": "npm run sync-contentful && astro check && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },

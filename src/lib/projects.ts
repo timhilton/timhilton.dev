@@ -1,30 +1,60 @@
 import { readFile, writeFile } from 'fs/promises';
 
-// src/lib/projects.ts
 import { createHash } from 'crypto';
 import path from 'path';
 
-interface ProjectData {
+// Define more specific interfaces for better type safety
+export interface BaseProjectData {
+  title: string;
   description: string;
   tech: string[];
   role: string;
   demoUrl: string;
-  slug?: string;
+  url?: string;
+  imageUrl: string;
+  isProtected: boolean;
 }
 
-interface ProtectedProject extends ProjectData {
+export interface PublicProject extends BaseProjectData {
+  id: string;
+  isProtected: false;
+}
+
+export interface ProtectedProject extends BaseProjectData {
+  id: string;
+  isProtected: true;
+  passwordHash: string;
+}
+
+export interface ProtectedProjectResponse extends Omit<ProtectedProject, 'passwordHash'> {}
+
+export type Project = PublicProject | ProtectedProject;
+
+// Define the raw data structure as it exists in projects.json
+interface RawProjectData {
+  title: string;
+  description: string;
+  tech: string[];
+  role: string;
+  demoUrl: string;
+  url?: string;
+  imageUrl: string;
+}
+
+interface RawProtectedProjectData extends RawProjectData {
   passwordHash: string;
 }
 
 interface ProjectStore {
-  [key: string]: ProjectData | ProtectedProject;
+  [key: string]: RawProjectData | RawProtectedProjectData;
 }
 
 // Secure hash function using SHA-256
 function hashPassword(password: string): string {
-  return createHash('sha256')
+  const hash = createHash('sha256')
     .update(password)
     .digest('hex');
+  return hash;
 }
 
 // Compare password hash securely (constant-time comparison)
@@ -36,6 +66,11 @@ function secureCompare(a: string, b: string): boolean {
     result |= a.charCodeAt(i) ^ b.charCodeAt(i);
   }
   return result === 0;
+}
+
+// Type guard to check if a project is protected
+function isProtectedProject(project: RawProjectData | RawProtectedProjectData): project is RawProtectedProjectData {
+  return 'passwordHash' in project;
 }
 
 // Load projects from JSON file
@@ -50,20 +85,62 @@ async function loadProjects(): Promise<ProjectStore> {
   }
 }
 
+// Get all projects with basic info (no protected data)
+export async function getAllProjects(): Promise<Project[]> {
+  const projects = await loadProjects();
+  
+  return Object.entries(projects).map(([id, data]) => {
+    const baseProject = {
+      id,
+      title: data.title,
+      description: data.description,
+      tech: data.tech,
+      role: data.role,
+      demoUrl: data.demoUrl,
+      url: data.url,
+      imageUrl: data.imageUrl,
+    };
+
+    if (isProtectedProject(data)) {
+      return {
+        ...baseProject,
+        isProtected: true,
+      } as ProtectedProject;
+    }
+
+    return {
+      ...baseProject,
+      isProtected: false,
+    } as PublicProject;
+  });
+}
+
+// Get single project data (with password verification for protected projects)
 export async function getProjectData(
   projectId: string,
   password?: string
-): Promise<ProjectData | null> {
+): Promise<Project | null> {
   try {
     const projects = await loadProjects();
-    const project = projects[projectId];
+    const projectData = projects[projectId];
 
-    if (!project) {
+    if (!projectData) {
       return null;
     }
 
+    const baseProject = {
+      id: projectId,
+      title: projectData.title,
+      description: projectData.description,
+      tech: projectData.tech,
+      role: projectData.role,
+      demoUrl: projectData.demoUrl,
+      url: projectData.url,
+      imageUrl: projectData.imageUrl,
+    };
+
     // Check if project is protected
-    if ('passwordHash' in project) {
+    if (isProtectedProject(projectData)) {
       // If no password provided for protected project
       if (!password) {
         throw new Error('Password required');
@@ -71,19 +148,24 @@ export async function getProjectData(
 
       // Verify password
       const hashedPassword = hashPassword(password);
-      if (!secureCompare(hashedPassword, project.passwordHash)) {
+
+      if (!secureCompare(hashedPassword, projectData.passwordHash)) {
         throw new Error('Invalid password');
       }
 
-      // Return project data without the password hash
-      const { passwordHash, ...projectData } = project;
-      return projectData;
+      // Return protected project data without the password hash
+      return {
+        ...baseProject,
+        isProtected: true,
+      } as ProtectedProject;
     }
 
     // Return unprotected project data
-    return project;
+    return {
+      ...baseProject,
+      isProtected: false,
+    } as PublicProject;
   } catch (error) {
-    console.error('Error getting project data:', error);
     throw error;
   }
 }
@@ -91,20 +173,28 @@ export async function getProjectData(
 // Utility function to add a new project (for admin use)
 export async function addProject(
   projectId: string,
-  projectData: ProjectData,
+  projectData: Omit<BaseProjectData, 'isProtected'>,
   password?: string
 ): Promise<void> {
   try {
     const projects = await loadProjects();
+    const baseProject: RawProjectData = {
+      title: projectData.title,
+      description: projectData.description,
+      tech: projectData.tech,
+      role: projectData.role,
+      demoUrl: projectData.demoUrl,
+      url: projectData.url,
+      imageUrl: projectData.imageUrl,
+    };
 
     if (password) {
-      const passwordHash = hashPassword(password);
       projects[projectId] = {
-        ...projectData,
-        passwordHash,
+        ...baseProject,
+        passwordHash: hashPassword(password),
       };
     } else {
-      projects[projectId] = projectData;
+      projects[projectId] = baseProject;
     }
 
     // Save updated projects
