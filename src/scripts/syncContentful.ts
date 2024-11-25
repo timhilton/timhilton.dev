@@ -1,6 +1,6 @@
-import type { Entry, EntryCollection } from 'contentful';
 import { mkdir, writeFile } from 'fs/promises';
 
+import type { Entry } from 'contentful';
 import type { PortfolioFields } from '../lib/contentful.ts';
 import { contentfulClient } from '../lib/contentful.ts';
 import { createHash } from 'crypto';

@@ -16,7 +16,7 @@ export const POST: APIRoute = async ({ params, request }) => {
     try {
       const bodyData = JSON.parse(rawBody);
       password = bodyData.password;
-    } catch (e) {
+    } catch (e: any) {
       console.error('Failed to parse request body:', e);
       return new Response(JSON.stringify({
         error: 'Invalid request body',
@@ -59,7 +59,7 @@ export const POST: APIRoute = async ({ params, request }) => {
         'Content-Type': 'application/json'
       }
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('API route error:', error);
     return new Response(JSON.stringify({
       error: 'Invalid password or server error',
