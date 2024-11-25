@@ -1,6 +1,5 @@
 ---
 // src/components/PortfolioItem.astro
-import { Image } from "astro:assets";
 
 interface Props {
   id: string;
@@ -36,7 +35,7 @@ const {
   data-protected={isProtected}
 >
   <button class="portfolio-item" style={`--delay: ${index * 0.2}s`}>
-    <Image src={imageUrl} alt={title || ""} width="512" height="512" />
+    <img src={imageUrl} alt={title || ""} width="512" height="512" />
     <h3>{title}</h3>
   </button>
 
