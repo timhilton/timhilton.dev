@@ -2,6 +2,8 @@
 import Layout from "../layouts/Layout.astro";
 import PortfolioItem from "../components/PortfolioItem.astro";
 import { getAllProjects } from "../lib/projects";
+import { Image } from "astro:assets";
+import aws from "../images/aws-certified-cloud-practitioner.png";
 
 // Load all projects with basic info
 const projects = await getAllProjects();
@@ -48,7 +50,10 @@ const title = "Tim Hilton - Work";
 
     .portfolio-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        grid-template-columns: repeat(
+            auto-fill,
+            minmax(250px, 1fr)
+        );
         gap: 24px;
 
         @media screen and (max-width: 768px) {
