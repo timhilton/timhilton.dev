@@ -1,5 +1,6 @@
 import { mkdir, writeFile } from 'fs/promises';
 
+import type { Document } from '@contentful/rich-text-types'
 import type { Entry } from 'contentful';
 import type { PortfolioFields } from '../lib/contentful.ts';
 import { contentfulClient } from '../lib/contentful.ts';
@@ -15,6 +16,7 @@ interface ProjectData {
   demoUrl: string;
   url?: string;
   imageUrl: string;
+  awards: Document;
 }
 
 interface ProtectedProject extends ProjectData {
@@ -51,6 +53,7 @@ async function syncContentfulToJson() {
         imageUrl: string;
         isProtected: boolean;
         password?: string;
+        awards: Document
       };
 
       const projectData: ProjectData = {
@@ -61,6 +64,7 @@ async function syncContentfulToJson() {
         demoUrl: fields.demoUrl ?? '', // Use empty string if missing
         url: fields.url, // Allow undefined
         imageUrl: fields.imageUrl ?? '', // Use empty string if missing
+        awards: fields.awards ?? ''
       };
 
       const projectId = fields.project.toLowerCase().replace(/\s+/g, '-');

@@ -27,6 +27,7 @@ export interface PortfolioFields {
     imageUrl: EntryFieldTypes.Text,
     isProtected: EntryFieldTypes.Boolean
     password: EntryFieldTypes.Text
+    awards: EntryFieldTypes.RichText
   }
 }
 

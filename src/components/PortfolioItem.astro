@@ -1,5 +1,7 @@
 ---
 // src/components/PortfolioItem.astro
+import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
+import { Document } from "@contentful/rich-text-types";
 
 interface Props {
   id: string;
@@ -12,6 +14,7 @@ interface Props {
   imageUrl: string;
   isProtected: boolean;
   index: number;
+  awards: Document;
 }
 
 const {
@@ -25,6 +28,7 @@ const {
   url,
   index,
   isProtected,
+  awards,
 } = Astro.props;
 ---
 
@@ -87,6 +91,13 @@ const {
               <h2>{title}</h2>
               <p class="description">{description}</p>
 
+              {role && (
+                <div class="role">
+                  <h5>Role</h5>
+                  <p>{role}</p>
+                </div>
+              )}
+
               {tech && (
                 <div class="tech-stack">
                   <h5>Technologies</h5>
@@ -98,10 +109,9 @@ const {
                 </div>
               )}
 
-              {role && (
-                <div class="role">
-                  <h5>Role</h5>
-                  <p>{role}</p>
+              {awards && (
+                <div class="awards" set:html={documentToHtmlString(awards)}>
+                  <h5>Awards</h5>
                 </div>
               )}
 
@@ -220,7 +230,7 @@ const {
     min-height: 100dvh;
 
     @media screen and (max-width: 768px) {
-      padding: 3rem 0 3rem;
+      padding: 3rem 0 5rem;
     }
   }
   .close-button {
@@ -285,6 +295,14 @@ const {
     margin: 1.5rem 0;
   }
 
+  .role {
+    margin-bottom: 1.5rem;
+
+    p {
+      margin: 0;
+    }
+  }
+
   .tech-tags {
     display: flex;
     flex-wrap: wrap;
@@ -310,7 +328,8 @@ const {
   .description,
   .tech-stack,
   .role,
-  .actions {
+  .actions,
+  .awards {
     @media screen and (max-width: 768px) {
       padding: 0 3rem 0;
     }
@@ -318,6 +337,39 @@ const {
 
   video {
     width: 100%;
+  }
+
+  .awards {
+    margin-bottom: 1.5rem;
+
+    ul,
+    p {
+      margin: 0;
+      padding: 0;
+    }
+
+    a {
+      position: relative;
+      color: var(--text-color);
+      text-decoration: none;
+    }
+    a::after {
+      content: "→";
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%) rotate(-45deg);
+      color: currentColor;
+      transition: transform 0.3s ease;
+      margin-inline-start: 5px;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  }
+
+  h5 {
+    margin-bottom: 1em;
   }
 </style>
 
@@ -423,7 +475,7 @@ const {
         closeAllModals();
       });
 
-      const modalContent = modalContainer.querySelector('.modal-content')!;
+      const modalContent = modalContainer.querySelector(".modal-content")!;
 
       // Password verification
       if (isProtected) {
@@ -540,9 +592,9 @@ const {
       details.appendChild(video);
 
       if (data.url) {
-        const actionEl = document.createElement('div');
-        actionEl.classList.add('actions');
-          actionEl.innerHTML = `
+        const actionEl = document.createElement("div");
+        actionEl.classList.add("actions");
+        actionEl.innerHTML = `
           <a href="${data.url}" class="button secondary" target="_blank" rel="noopener noreferrer">
             View Project
           </a>

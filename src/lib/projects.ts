@@ -1,5 +1,6 @@
 import { readFile, writeFile } from 'fs/promises';
 
+import type { Document } from '@contentful/rich-text-types';
 import { createHash } from 'crypto';
 import path from 'path';
 
@@ -13,6 +14,7 @@ export interface BaseProjectData {
   url?: string;
   imageUrl: string;
   isProtected: boolean;
+  awards: Document;
 }
 
 export interface PublicProject extends BaseProjectData {
@@ -39,6 +41,7 @@ interface RawProjectData {
   demoUrl: string;
   url?: string;
   imageUrl: string;
+  awards: Document;
 }
 
 interface RawProtectedProjectData extends RawProjectData {
@@ -99,6 +102,7 @@ export async function getAllProjects(): Promise<Project[]> {
       demoUrl: data.demoUrl,
       url: data.url,
       imageUrl: data.imageUrl,
+      awards: data.awards
     };
 
     if (isProtectedProject(data)) {
@@ -137,6 +141,7 @@ export async function getProjectData(
       demoUrl: projectData.demoUrl,
       url: projectData.url,
       imageUrl: projectData.imageUrl,
+      awards: projectData.awards
     };
 
     // Check if project is protected
@@ -186,6 +191,7 @@ export async function addProject(
       demoUrl: projectData.demoUrl,
       url: projectData.url,
       imageUrl: projectData.imageUrl,
+      awards: projectData.awards
     };
 
     if (password) {
