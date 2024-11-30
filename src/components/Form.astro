@@ -1,6 +1,7 @@
 ---
 // Contact.astro
 import styles from "./form.module.css";
+export const prerender = true;
 ---
 
 <section class={styles.contactContainer}>
@@ -91,41 +92,42 @@ import styles from "./form.module.css";
         form.addEventListener("submit", (e) => {
             e.preventDefault();
             errorContainer.textContent = "";
-        if (form instanceof HTMLFormElement) {
-            const formData = new FormData(form);
-            const email = formData.get("email");
+            if (form instanceof HTMLFormElement) {
+                const formData = new FormData(form);
+                const email = formData.get("email");
 
-            if (!validateEmail(email)) {
-                errorContainer.textContent =
-                    "Please enter a valid email address";
-                return;
-            }
+                if (!validateEmail(email)) {
+                    errorContainer.textContent =
+                        "Please enter a valid email address";
+                    return;
+                }
 
-            const dataToSubmit = Object.fromEntries(formData.entries());
+                const dataToSubmit = Object.fromEntries(formData.entries());
 
-            fetch("/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: encode({ "form-name": "contact", ...dataToSubmit }),
-            })
-                .then(() => {
-                    form.style.display = "none";
-                    const successMessage = document.createElement("p");
-                    successMessage.innerHTML = `
+                fetch("/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: encode({ "form-name": "contact", ...dataToSubmit }),
+                })
+                    .then(() => {
+                        form.style.display = "none";
+                        const successMessage = document.createElement("p");
+                        successMessage.innerHTML = `
                 Thank you for your message! I look forward to speaking with you! 
                 <a href="/" aria-label="go back to home page">Back to home page.</a>
             `;
-                    if (form.parentNode) {
-                        form.parentNode.appendChild(successMessage);
-                    }
-                })
-                .catch((error) => {
-                    console.error("Form submission error:", error);
-                    errorContainer.textContent =
-                        "There was a problem submitting the form. Please try again.";
-                });
-        }});
+                        if (form.parentNode) {
+                            form.parentNode.appendChild(successMessage);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Form submission error:", error);
+                        errorContainer.textContent =
+                            "There was a problem submitting the form. Please try again.";
+                    });
+            }
+        });
     });
 </script>
