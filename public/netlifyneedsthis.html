@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tim Hilton contact form</title>
+
+<body>
+    <form id="contactForm" name="contact" method="POST" data-netlify: "true" data-netlify-honeypot="bot-field" action="/">
+        <input type="hidden" name="form-name" value="contact" />
+        <input type="hidden" name="bot-field" />
+    
+        <div>
+            <input type="text" id="name" name="name" required class={styles.input} />
+            <label for="name">Name</label>
+        </div>
+    
+        <div>
+            <input type="email" id="email" name="email" required class={styles.input} />
+            <label for="email">Email</label>
+        </div>
+    
+        <div>
+            <input type="text" id="subject" name="subject" required class={styles.input} />
+            <label for="subject">Subject</label>
+        </div>
+    
+        <div>
+            <textarea id="message" name="message" required class={styles.input}></textarea>
+            <label for="message">Message</label>
+        </div>
+    
+        <button type="submit" aria-label="send your email and let's talk!">
+            Let's Talk
+        </button>
+    
+        <div id="errorContainer"></div>
+    </form>
+</body>
+
+</html>
