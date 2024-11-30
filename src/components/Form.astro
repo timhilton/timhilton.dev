@@ -1,0 +1,131 @@
+---
+// Contact.astro
+import styles from "./form.module.css";
+---
+
+<section class={styles.contactContainer}>
+    <form
+        id="contactForm"
+        name="contact"
+        method="POST"
+        data-netlify: "true"
+        data-netlify-honeypot="bot-field"
+        action="/"
+        class={styles.contactForm}
+    >
+        <input type="hidden" name="form-name" value="contact" />
+        <input type="hidden" name="bot-field" />
+
+        <div class={styles.inputContainer}>
+            <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                class={styles.input}
+            />
+            <label for="name">Name</label>
+        </div>
+
+        <div class={styles.inputContainer}>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                class={styles.input}
+            />
+            <label for="email">Email</label>
+        </div>
+
+        <div class={styles.inputContainer}>
+            <input
+                type="text"
+                id="subject"
+                name="subject"
+                required
+                class={styles.input}
+            />
+            <label for="subject">Subject</label>
+        </div>
+
+        <div class={styles.inputContainer}>
+            <textarea id="message" name="message" required class={styles.input}
+            ></textarea>
+            <label for="message">Message</label>
+        </div>
+
+        <button
+            type="submit"
+            class={styles.submit}
+            aria-label="send your email and let's talk!"
+        >
+            Let's Talk
+        </button>
+
+        <div id="errorContainer" class={styles.errorMessage}></div>
+    </form>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("contactForm")!;
+        const errorContainer = document.getElementById("errorContainer")!;
+
+        const validateEmail = (email) => {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        };
+
+        const encode = (data) => {
+            return Object.keys(data)
+                .map(
+                    (key) =>
+                        encodeURIComponent(key) +
+                        "=" +
+                        encodeURIComponent(data[key]),
+                )
+                .join("&");
+        };
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            errorContainer.textContent = "";
+        if (form instanceof HTMLFormElement) {
+            const formData = new FormData(form);
+            const email = formData.get("email");
+
+            if (!validateEmail(email)) {
+                errorContainer.textContent =
+                    "Please enter a valid email address";
+                return;
+            }
+
+            const dataToSubmit = Object.fromEntries(formData.entries());
+
+            fetch("/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: encode({ "form-name": "contact", ...dataToSubmit }),
+            })
+                .then(() => {
+                    form.style.display = "none";
+                    const successMessage = document.createElement("p");
+                    successMessage.innerHTML = `
+                Thank you for your message! I look forward to speaking with you! 
+                <a href="/" aria-label="go back to home page">Back to home page.</a>
+            `;
+                    if (form.parentNode) {
+                        form.parentNode.appendChild(successMessage);
+                    }
+                })
+                .catch((error) => {
+                    console.error("Form submission error:", error);
+                    errorContainer.textContent =
+                        "There was a problem submitting the form. Please try again.";
+                });
+        }});
+    });
+</script>
