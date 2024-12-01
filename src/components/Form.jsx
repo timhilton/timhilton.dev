@@ -48,6 +48,8 @@ export default function Contact() {
                     data-netlify-honeypot="bot-field"
                     onSubmit={handleSubmit}
                 >
+                    <input type="hidden" name="form-name" value="contact" />
+                    <input type="text" name="bot-field" hidden />
                     <div className={styles.inputContainer}>
                         <input
                             type="text"
