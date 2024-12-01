@@ -10,6 +10,11 @@ const title = "Tim Hilton - Contact";
 <Layout title={title}>
     <section transition:animate="slide">
         <h2><span transition:name="fullName">Contact Me</span></h2>
+        <form name="contact" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+            <input type="text" name="name" />
+            <input type="email" name="email" />
+            <textarea name="message"></textarea>
+        </form>
         <Form client:load />
     </section>
 </Layout>
