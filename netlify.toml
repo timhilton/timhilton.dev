@@ -2,11 +2,6 @@
   command = "npm run build"  # Your build command for Astro
   publish = "dist"  # The directory where your built site is located
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
 [forms]
   # This enables form processing
   submissions = true
