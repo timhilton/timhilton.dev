@@ -1,4 +1,5 @@
 ---
+export const prerender = true;
 import Layout from "../layouts/Layout.astro";
 import { Image } from "astro:assets";
 import me from "../images/tim.jpg";
@@ -13,9 +14,7 @@ import { fade } from "astro:transitions";
 				transition:animate={fade({ duration: "0.4s" })}
 			>
 				<h1 transition:name="fullName">Tim Hilton</h1>
-				<p>
-					crafting frontend experiences for over a decade
-				</p>
+				<p>crafting frontend experiences for over a decade</p>
 			</div>
 			<div class="image-wrapper" transition:name="image">
 				<Image src={me} alt="Tim Hilton" />
