@@ -1,6 +1,8 @@
 ---
+export const prerender = true;
+
 import Layout from "../layouts/Layout.astro";
-import Form from "../components/Form.astro";
+import Form from "../components/Form.jsx";
 
 const title = "Tim Hilton - Contact";
 ---
@@ -8,7 +10,7 @@ const title = "Tim Hilton - Contact";
 <Layout title={title}>
     <section transition:animate="slide">
         <h2><span transition:name="fullName">Contact Me</span></h2>
-        <Form/>
+        <Form client:load />
     </section>
 </Layout>
 
@@ -20,8 +22,6 @@ const title = "Tim Hilton - Contact";
         align-items: center;
         justify-content: center;
         flex-direction: column;
-
-
     }
     h2 {
         font-size: 2.5rem;
