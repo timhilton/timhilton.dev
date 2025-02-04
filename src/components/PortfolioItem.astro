@@ -40,7 +40,7 @@ const {
 >
   <button class="portfolio-item" style={`--delay: ${index * 0.2}s`}>
     <img src={imageUrl} alt={title || ""} width="512" height="512" />
-    <h3>{title}</h3>
+    <h3 class="portfolio-title">{title}</h3>
   </button>
 
   <div class="modal-container">
@@ -98,7 +98,7 @@ const {
                 </div>
               )}
 
-              {tech && (
+              {tech.length > 0 && (
                 <div class="tech-stack">
                   <h5>Technologies</h5>
                   <div class="tech-tags">
@@ -148,6 +148,7 @@ const {
 </div>
 
 <style>
+  .portfolio-wrapper {
   .portfolio-item {
     border: 1px solid #8e8d8d;
     background-color: var(--background-color);
@@ -169,7 +170,7 @@ const {
     border-radius: 12px;
   }
 
-  .portfolio-item h3 {
+  .portfolio-item .portfolio-title {
     margin: 12px 0;
   }
 
@@ -371,6 +372,7 @@ const {
   h5 {
     margin-bottom: 1em;
   }
+}
 </style>
 
 <script>
