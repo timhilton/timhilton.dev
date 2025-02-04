@@ -550,21 +550,23 @@ const {
       details.appendChild(descriptionEl);
 
       // create Tech Stack
-      const techStack = document.createElement("div");
-      techStack.classList.add("tech-stack");
+      if (data.tech.length > 0) {
+        const techStack = document.createElement("div");
+        techStack.classList.add("tech-stack");
 
-      const techHeading = document.createElement("h5");
-      techHeading.textContent = "Technologies";
-      techStack.appendChild(techHeading);
+        const techHeading = document.createElement("h5");
+        techHeading.textContent = "Technologies";
+        techStack.appendChild(techHeading);
 
-      const techTagsEl = document.createElement("p");
-      techTagsEl.classList.add("tech-tags");
-      techTagsEl.innerHTML = data.tech
-        .map((tech) => `<span class="tech-tag">${tech}</span>`)
-        .join("");
+        const techTagsEl = document.createElement("p");
+        techTagsEl.classList.add("tech-tags");
+        techTagsEl.innerHTML = data.tech
+          .map((tech) => `<span class="tech-tag">${tech}</span>`)
+          .join("");
 
-      techStack.appendChild(techTagsEl);
-      details.appendChild(techStack);
+        techStack.appendChild(techTagsEl);
+        details.appendChild(techStack);
+      }
 
       //create role
       const roleEl = document.createElement("div");
