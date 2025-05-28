@@ -8,6 +8,7 @@ import { contentfulClient } from "../lib/contentful";
 import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
 import type { AboutFields } from "../lib/contentful";
 import aws from "../images/aws-certified-cloud-practitioner.png";
+import aipractitioner from '../images/aws-certified-ai-practitioner.png';
 
 const title = "Tim Hilton - About";
 
@@ -45,69 +46,79 @@ const elevatorPitchHtml = documentToHtmlString(about);
                 >
                     <Image src={aws} alt="aws cloud practitioner" />
                 </a>
+                <a
+                    href="https://www.credly.com/badges/44d996a1-f5a4-4787-be85-2e9835446d65/public_url"
+                    target="_blank"
+                >
+                    <Image src={aipractitioner} alt="aws ai practitioner" />
+                </a>
             </div>
         </div>
-    </main>
-</Layout>
 
-<style>
-    main {
-        min-height: max-content;
-        height: calc(100dvh - 48px);
-        padding: 8rem 2rem 2rem;
+        <style>
+            main {
+                min-height: max-content;
+                height: calc(100dvh - 48px);
+                padding: 8rem 2rem 2rem;
 
-        @media screen and (max-width: 768px) {
-            padding: 5rem 2rem 2rem;
-            height: max-content;
-        }
-    }
-    .hero-container {
-        width: 75vw;
-        display: grid;
-        grid-template-columns: max-content 1fr;
-        gap: 24px;
-        margin: 0 auto;
-
-        @media screen and (max-width: 768px) {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    .image-wrapper {
-        position: relative;
-        aspect-ratio: 1;
-        width: 15vw;
-        border: 4px solid #8e8d8d;
-        border-radius: 2rem;
-        overflow: hidden;
-
-        @media screen and (max-width: 768px) {
-            width: 30vw;
-            justify-self: center;
-        }
-    }
-    .image-wrapper img {
-        width: 100%;
-        height: 100%;
-    }
-    h2 {
-        font-size: 2.5rem;
-        font-weight: bold;
-        margin: 0;
-    }
-
-    .certifications {
-        img {
-            width: 10vw;
-            height: auto;
-        }
-
-        @media screen and (max-width: 768px) {
-            img {
-                width: 30vw;
-                height: auto;
-                justify-self: center;
+                @media screen and (max-width: 768px) {
+                    padding: 5rem 2rem 2rem;
+                    height: max-content;
+                }
             }
-        }
-    }
-</style>
+            .hero-container {
+                width: 75vw;
+                display: grid;
+                grid-template-columns: max-content 1fr;
+                gap: 24px;
+                margin: 0 auto;
+
+                @media screen and (max-width: 768px) {
+                    grid-template-columns: 1fr;
+                }
+            }
+
+            .image-wrapper {
+                position: relative;
+                aspect-ratio: 1;
+                width: 15vw;
+                border: 4px solid #8e8d8d;
+                border-radius: 2rem;
+                overflow: hidden;
+
+                @media screen and (max-width: 768px) {
+                    width: 30vw;
+                    justify-self: center;
+                }
+            }
+            .image-wrapper img {
+                width: 100%;
+                height: 100%;
+            }
+            h2 {
+                font-size: 2.5rem;
+                font-weight: bold;
+                margin: 0;
+            }
+
+            .certifications {
+                img {
+                    width: 10vw;
+                    height: auto;
+                }
+
+                a {
+                    text-decoration: none;
+                }
+
+                @media screen and (max-width: 768px) {
+                    img {
+                        width: 30vw;
+                        height: auto;
+                        justify-self: center;
+                    }
+                }
+            }
+        </style>
+    </main></Layout
+>
