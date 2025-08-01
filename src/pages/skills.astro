@@ -1,0 +1,74 @@
+---
+import { Image } from "astro:assets";
+
+import SkillsCloud from "../components/SkillsCloud.jsx";
+import SkillsLegend from "../components/SkillsLegend.jsx";
+import Layout from "../layouts/Layout.astro";
+import aws from "../images/aws-certified-cloud-practitioner.png";
+import aipractitioner from "../images/aws-certified-ai-practitioner.png";
+
+const title = "Tim Hilton - Technical Skills";
+---
+
+<Layout title={title}>
+    <section class="container">
+        <h2><span transition:name="fullName">Technical Skills</span></h2>
+        <SkillsCloud client:load />
+        <SkillsLegend client:load />
+
+        <div class="certifications">
+            <h3>Certifications</h3>
+            <a
+                href="https://www.credly.com/badges/39e7bc28-9333-4d5b-9db9-8967aa54e1ba/public_url"
+                target="_blank"
+            >
+                <Image src={aws} alt="aws cloud practitioner" />
+            </a>
+            <a
+                href="https://www.credly.com/badges/44d996a1-f5a4-4787-be85-2e9835446d65/public_url"
+                target="_blank"
+            >
+                <Image src={aipractitioner} alt="aws ai practitioner" />
+            </a>
+        </div>
+    </section>
+    <style>
+        .container {
+            width: 75vw;
+            min-height: max-content;
+            margin: 0 auto;
+            height: calc(100dvh - 48px);
+            padding: 3rem 2rem 2rem;
+
+            @media screen and (max-width: 768px) {
+                padding: 3rem 0 2rem;
+                height: max-content;
+            }
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 24px;
+        }
+
+        .certifications {
+            img {
+                width: 10vw;
+                height: auto;
+            }
+
+            a {
+                text-decoration: none;
+            }
+
+            @media screen and (max-width: 768px) {
+                img {
+                    width: 30vw;
+                    height: auto;
+                    justify-self: center;
+                }
+            }
+        }
+    </style>
+</Layout>
