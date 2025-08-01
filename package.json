@@ -16,11 +16,18 @@
     "@astrojs/preact": "^3.5.3",
     "@astrojs/react": "^3.6.2",
     "@contentful/rich-text-html-renderer": "^17.0.0",
+    "@icons-pack/react-simple-icons": "^13.7.0",
+    "@react-spring/web": "^10.0.1",
+    "@react-three/drei": "^9.89.2",
+    "@react-three/fiber": "^8.13.5",
     "astro": "^4.16.13",
     "contentful": "^11.2.3",
     "dotenv": "^16.4.5",
     "lucide-react": "^0.460.0",
-    "preact": "^10.24.3"
+    "preact": "^10.24.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "three": "^0.153.0"
   },
   "devDependencies": {
     "@types/node": "^22.9.3",

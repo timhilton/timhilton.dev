@@ -1,5 +1,5 @@
 import styles from './form.module.css';
-import { useState } from 'preact/hooks';
+import { useState } from 'react';
 
 const encode = (data) => {
     return Object.keys(data)
