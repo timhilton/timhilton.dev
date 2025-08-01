@@ -3,7 +3,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import SkillLogo from './SkillLogo';
-import skills from '../data/skills-cloud.json';
 
 function getSpherePosition(index, total, radius = 2.8) {
     const phi = Math.acos(-1 + (2 * index) / total);
@@ -16,25 +15,21 @@ function getSpherePosition(index, total, radius = 2.8) {
     ];
 }
 
-function useColorScheme() {
-    const [isDark, setIsDark] = useState(false);
+export default function SkillsCloud() {
+    const [skills, setSkills] = useState(null);
+    const [isHovering, setIsHovering] = useState(false);
 
     useEffect(() => {
-        const media = window.matchMedia('(prefers-color-scheme: dark)');
-        setIsDark(media.matches);
-        const listener = (e) => setIsDark(e.matches);
-        media.addEventListener('change', listener);
-        return () => media.removeEventListener('change', listener);
+        fetch('/data/skills-cloud.json')
+            .then((res) => res.json())
+            .then(setSkills)
+            .catch((err) => console.error('Failed to load skills:', err));
     }, []);
 
-    return isDark;
-}
-
-export default function SkillsCloud() {
-    const [isHovering, setIsHovering] = useState(false);
-    const entries = useMemo(() => Object.entries(skills), []);
+    const entries = useMemo(() => (skills ? Object.entries(skills) : []), [skills]);
     const total = entries.length;
-    const isDark = useColorScheme();
+
+    if (!skills) return <div>Loading skills...</div>;
 
     return (
         <Canvas camera={{ position: [0, 0, 8], fov: 50 }}>

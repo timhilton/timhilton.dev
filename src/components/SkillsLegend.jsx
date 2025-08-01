@@ -1,7 +1,17 @@
-import React from 'react';
-import { categoryColors } from '../data/skillCategories';
+import React, { useEffect, useState } from 'react';
 
 export default function SkillsLegend() {
+    const [categoryColors, setCategoryColors] = useState(null);
+
+    useEffect(() => {
+        fetch('/data/skillCategories.json')
+            .then((res) => res.json())
+            .then(setCategoryColors)
+            .catch((err) => console.error('Failed to load skill categories:', err));
+    }, []);
+
+    if (!categoryColors) return null;
+
     return (
         <div style={{
             display: 'flex',
