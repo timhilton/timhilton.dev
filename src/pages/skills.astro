@@ -6,6 +6,7 @@ import SkillsLegend from "../components/SkillsLegend.jsx";
 import Layout from "../layouts/Layout.astro";
 import aws from "../images/aws-certified-cloud-practitioner.png";
 import aipractitioner from "../images/aws-certified-ai-practitioner.png";
+import { only } from "node:test";
 
 const title = "Tim Hilton - Technical Skills";
 ---
@@ -13,8 +14,8 @@ const title = "Tim Hilton - Technical Skills";
 <Layout title={title}>
     <section class="container">
         <h2><span transition:name="fullName">Technical Skills</span></h2>
-        <SkillsCloud client:load />
-        <SkillsLegend client:load />
+        <SkillsCloud client:only="react" />
+        <SkillsLegend client:only="react" />
 
         <div class="certifications">
             <h3>Certifications</h3>
