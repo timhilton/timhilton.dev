@@ -1,0 +1,107 @@
+{
+  "JavaScript": {
+    "scale": 2,
+    "slug": "javascript",
+    "category": "frontend"
+  },
+  "CSS": {
+    "scale": 1.2,
+    "slug": "css",
+    "category": "frontend"
+  },
+  "Ruby": {
+    "scale": 0.8,
+    "slug": "ruby",
+    "category": "backend"
+  },
+  "HTML": {
+    "scale": 0.6,
+    "slug": "html5",
+    "category": "frontend"
+  },
+  "TypeScript": {
+    "scale": 1.5,
+    "slug": "typescript",
+    "category": "frontend"
+  },
+  "Astro": {
+    "scale": 0.8,
+    "slug": "astro",
+    "category": "frontend"
+  },
+  "Shell": {
+    "scale": 0.4,
+    "slug": "gnubash",
+    "category": "infra"
+  },
+  "Sass": {
+    "scale": 1,
+    "slug": "sass",
+    "category": "frontend"
+  },
+  "Vue": {
+    "scale": 0.8,
+    "slug": "vuedotjs",
+    "category": "frontend"
+  },
+  "Handlebars": {
+    "scale": 1,
+    "slug": "handlebarsdotjs",
+    "category": "frontend"
+  },
+  "React": {
+    "scale": 0.9,
+    "slug": "react",
+    "category": "frontend"
+  },
+  "Next.js": {
+    "scale": 0.6,
+    "slug": "nextdotjs",
+    "category": "frontend"
+  },
+  "Styled Components": {
+    "scale": 0.8,
+    "slug": "styledcomponents",
+    "category": "frontend"
+  },
+  "Expo": {
+    "scale": 0.3,
+    "slug": "expo",
+    "category": "mobile"
+  },
+  "React Native": {
+    "scale": 0.3,
+    "slug": "react",
+    "category": "mobile"
+  },
+  "AWS": {
+    "scale": 0.7,
+    "label": "AWS",
+    "category": "infra"
+  },
+  "Contentful": {
+    "scale": 0.6,
+    "slug": "contentful",
+    "category": "cms"
+  },
+  "Storyblok": {
+    "scale": 0.4,
+    "slug": "storyblok",
+    "category": "cms"
+  },
+  "Vercel": {
+    "scale": 0.4,
+    "slug": "vercel",
+    "category": "infra"
+  },
+  "Preact": {
+    "scale": 0.2,
+    "slug": "preact",
+    "category": "frontend"
+  },
+  "Vite": {
+    "scale": 0.4,
+    "slug": "vite",
+    "category": "tools"
+  }
+}

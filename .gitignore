@@ -23,6 +23,6 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
-src/data/
+src/data/projects.json
 
 .netlify/
