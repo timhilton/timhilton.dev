@@ -1,7 +1,26 @@
-import * as SiIcons from '@icons-pack/react-simple-icons';
-
 import { Float, Html } from '@react-three/drei';
 import React, { useEffect, useRef, useState } from 'react';
+import {
+        SiAstro,
+        SiContentful,
+        SiCss,
+        SiExpo,
+        SiGnubash,
+        SiHandlebarsdotjs,
+        SiHtml5,
+        SiJavascript,
+        SiNextdotjs,
+        SiPreact,
+        SiReact,
+        SiRuby,
+        SiSass,
+        SiStoryblok,
+        SiStyledcomponents,
+        SiTypescript,
+        SiVercel,
+        SiVite,
+        SiVuedotjs
+} from '@icons-pack/react-simple-icons';
 
 import AWS from './Aws';
 import { useFrame } from '@react-three/fiber';
@@ -15,6 +34,28 @@ const categoryColors = {
     cms: '#9575CD',
     tools: '#E57373',
     other: '#B0BEC5',
+};
+
+export const iconMap = {
+    'javascript': SiJavascript,
+    'css': SiCss,
+    'ruby': SiRuby,
+    'html5': SiHtml5,
+    'typescript': SiTypescript,
+    'astro': SiAstro,
+    'gnubash': SiGnubash,
+    'sass': SiSass,
+    'vuedotjs': SiVuedotjs,
+    'handlebarsdotjs': SiHandlebarsdotjs,
+    'react': SiReact,
+    'nextdotjs': SiNextdotjs,
+    'styledcomponents': SiStyledcomponents,
+    'expo': SiExpo,
+    'contentful': SiContentful,
+    'storyblok': SiStoryblok,
+    'vercel': SiVercel,
+    'preact': SiPreact,
+    'vite': SiVite,
 };
 
 function TypingText({ text, speed = 40 }) {
@@ -36,7 +77,7 @@ function TypingText({ text, speed = 40 }) {
     return <>{displayed}</>;
 }
 
-export default function SkillLogo({ slug, label, position, scale = 1, category = 'other', onHoverChange = () => {}, isDark }) {
+export default function SkillLogo({ slug, label, position, scale = 1, category = 'other', onHoverChange = () => {} }) {
     const ref = useRef();
     const [hovered, setHovered] = useState(false);
 
@@ -53,10 +94,8 @@ export default function SkillLogo({ slug, label, position, scale = 1, category =
     const isAWS = label === 'AWS';
     const categoryColor = categoryColors[category] || '#ffffff';
 
-    const iconKey = slug
-        ? `Si${slug.replace(/[^a-zA-Z0-9]/g, '').replace(/^\w/, c => c.toUpperCase())}`
-        : null;
-    const Icon = iconKey && SiIcons[iconKey];
+    const iconKey = slug ? iconMap[slug] : null;
+    const Icon = iconKey;
 
     const iconSize = Math.round(48 * scale);
 
