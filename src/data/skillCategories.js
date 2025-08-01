@@ -1,5 +1,5 @@
 // src/data/skillCategories.js
-export const categoryColors = {
+const categoryColors = {
     frontend: '#4FC3F7',
     backend: '#81C784',
     infrastructure: '#FFD54F',
@@ -9,3 +9,5 @@ export const categoryColors = {
     tools: '#E57373',
     other: '#B0BEC5'
 };
+
+export default categoryColors;
