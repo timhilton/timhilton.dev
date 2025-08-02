@@ -7,8 +7,6 @@ import { fade } from "astro:transitions";
 import { contentfulClient } from "../lib/contentful";
 import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
 import type { AboutFields } from "../lib/contentful";
-import aws from "../images/aws-certified-cloud-practitioner.png";
-import aipractitioner from '../images/aws-certified-ai-practitioner.png';
 
 const title = "Tim Hilton - About";
 
@@ -37,21 +35,6 @@ const elevatorPitchHtml = documentToHtmlString(about);
                     >,
                 </h2>
                 <div set:html={elevatorPitchHtml} />
-            </div>
-            <div class="certifications">
-                <h3>Certifications</h3>
-                <a
-                    href="https://www.credly.com/badges/39e7bc28-9333-4d5b-9db9-8967aa54e1ba/public_url"
-                    target="_blank"
-                >
-                    <Image src={aws} alt="aws cloud practitioner" />
-                </a>
-                <a
-                    href="https://www.credly.com/badges/44d996a1-f5a4-4787-be85-2e9835446d65/public_url"
-                    target="_blank"
-                >
-                    <Image src={aipractitioner} alt="aws ai practitioner" />
-                </a>
             </div>
         </div>
 
