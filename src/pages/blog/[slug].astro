@@ -1,0 +1,62 @@
+---
+import PostHeader from "../../components/storyblok/PostHeader.astro";
+import PostCopy from "../../components/storyblok/PostCopy.astro";
+import PostMedia from "../../components/storyblok/PostMedia.astro";
+import Layout from "../../layouts/Layout.astro";
+
+const { slug } = Astro.params;
+const url = new URL(Astro.request.url);
+const token =
+    url.searchParams.get("token") || import.meta.env.STORYBLOK_API_TOKEN;
+
+console.log("Fetching blog post:", slug);
+console.log("Using token:", token);
+
+const res = await fetch(
+    `https://api-us.storyblok.com/v2/cdn/stories/blog/${slug}?version=draft&token=${token}`,
+);
+
+if (!res.ok) {
+    console.error("Response status:", res.status);
+    const err = await res.text();
+    console.error("Error response:", err);
+    throw new Error("Failed to fetch blog post");
+}
+
+const { story } = await res.json();
+const blocks = story.content.body || [];
+---
+
+<Layout title={story.name}>
+    <article>
+        {
+            blocks.map((blok) => {
+                if (blok.component === "post_header") {
+                    return <PostHeader blok={blok} />;
+                } else if (blok.component === "post_copy") {
+                    return <PostCopy blok={blok} />;
+                } else if (blok.component === "post_media") {
+                    return <PostMedia blok={blok} />;
+                }
+                return null;
+            })
+        }
+    </article>
+</Layout>
+
+<style>
+    article {
+        max-width: 980px;
+        margin: 0 auto;
+        padding-top: 4rem;
+
+        @media screen and (max-width: 1024px) {
+            max-width: 768px;
+            width: 87.5%;
+        }
+
+        @media screen and (max-width: 768px) {
+            max-width: 414px;
+            width: 87.5%;
+        }
+    }

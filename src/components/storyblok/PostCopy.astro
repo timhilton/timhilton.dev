@@ -1,0 +1,8 @@
+---
+import { renderRichText } from "@storyblok/react";
+const { blok } = Astro.props;
+
+const html = renderRichText(blok.body);
+---
+
+<div class="post-copy" set:html={html} />

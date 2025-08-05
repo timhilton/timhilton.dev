@@ -1,0 +1,39 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const API_TOKEN = import.meta.env.STORYBLOK_API_TOKEN;
+console.log(API_TOKEN);
+
+const res = await fetch(
+    `https://api-us.storyblok.com/v2/cdn/stories?token=${API_TOKEN}&starts_with=blog/&version=draft&sort_by=first_published_at:desc`,
+);
+
+if (!res.ok) {
+    throw new Error("Failed to fetch blog posts from Storyblok.");
+}
+
+const json = await res.json();
+const posts = json.stories || [];
+const title = "Tim Hilton - Blog";
+---
+
+<Layout title={title}>
+    <main>
+        <h1>Blog</h1>
+        <ul>
+            {
+                posts.map((post) => (
+                    <li>
+                        <a href={`/blog/${post.slug}`}>{post.name}</a>
+                        <br />
+                        <small>
+                            {new Date(
+                                post.published_at || post.created_at,
+                            ).toLocaleDateString()}
+                        </small>
+                    </li>
+                ))
+            }
+        </ul>
+    </main>
+</Layout>

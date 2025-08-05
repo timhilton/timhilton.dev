@@ -1,0 +1,19 @@
+---
+const { media, caption } = Astro.props.blok;
+const isVideo = media?.filename?.endsWith(".mp4");
+---
+
+<figure>
+    {
+        isVideo ? (
+            <video src={media.filename} controls />
+        ) : (
+            <img
+                src={media.filename}
+                alt={caption || "Blog media"}
+                loading="lazy"
+            />
+        )
+    }
+    {caption && <figcaption>{caption}</figcaption>}
+</figure>

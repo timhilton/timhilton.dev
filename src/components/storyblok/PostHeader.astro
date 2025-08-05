@@ -1,0 +1,38 @@
+---
+const { headline, subheadline, date } = Astro.props.blok;
+---
+
+<header>
+    <h1>{headline}</h1>
+    {subheadline && <h2>{subheadline}</h2>}
+    {
+        date && (
+            <p>
+                <time datetime={date}>
+                    {new Date(date).toLocaleDateString()}
+                </time>
+            </p>
+        )
+    }
+</header>
+
+<style>
+    header {
+        margin-bottom: 2rem;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        margin: 0;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        color: var(--color-secondary);
+        margin-top: 0.5rem;
+    }
+
+    time {
+        color: var(--color-secondary);
+        font-size: 0.9rem;
+    }

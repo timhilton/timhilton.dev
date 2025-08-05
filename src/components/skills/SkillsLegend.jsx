@@ -1,5 +1,5 @@
 import React from 'react';
-import categoryColors from '../data/skillCategories.js';
+import categoryColors from '../../data/skillCategories.js';
 
 export default function SkillsLegend() {
     return (

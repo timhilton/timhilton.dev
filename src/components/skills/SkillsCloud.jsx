@@ -3,7 +3,7 @@ import React, { useMemo, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import SkillLogo from './SkillLogo';
-import skills from '../data/skills-cloud.json';
+import skills from '../../data/skills-cloud.json';
 
 function getSpherePosition(index, total, radius = 2.8) {
     const phi = Math.acos(-1 + (2 * index) / total);
