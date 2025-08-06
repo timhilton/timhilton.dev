@@ -28,6 +28,29 @@ const blocks = story.content.body || [];
 ---
 
 <Layout title={story.name}>
+    <div class="container">
+        <a
+            href="/blog"
+            style="display: inline-flex; align-items: center; text-decoration: none; color: inherit; font-size: 0.9rem;"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                style="margin-right: 0.5rem;"
+            >
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Back to blog
+        </a>
+    </div>
+
     <article>
         {
             blocks.map((blok) => {
@@ -48,7 +71,8 @@ const blocks = story.content.body || [];
     article {
         max-width: 980px;
         margin: 0 auto;
-        padding-top: 4rem;
+        padding-top: 3rem;
+        padding-bottom: 4rem;
 
         @media screen and (max-width: 1024px) {
             max-width: 768px;
@@ -60,3 +84,17 @@ const blocks = story.content.body || [];
             width: 87.5%;
         }
     }
+
+    .container {
+        width: 980px;
+        min-height: max-content;
+        margin: 0 auto;
+        padding: 4rem 2rem 2rem;
+
+        @media screen and (max-width: 768px) {
+            width: 100%;
+            padding: 3rem 0 2rem;
+            height: max-content;
+        }
+    }
+</style>

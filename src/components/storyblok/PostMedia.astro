@@ -17,3 +17,28 @@ const isVideo = media?.filename?.endsWith(".mp4");
     }
     {caption && <figcaption>{caption}</figcaption>}
 </figure>
+
+
+<style>
+    figure {
+        margin: 2rem 0;
+        text-align: center;
+    }
+
+    img, video {
+        max-width: 980px;
+        width: 50vw;
+        height: auto;
+
+        @media screen and (max-width: 768px) {
+            width: 87.5%;
+            max-width: 414px;
+            margin: 0 auto;
+        }
+    }
+
+    figcaption {
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        color: var(--color-secondary);
+    }
