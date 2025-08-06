@@ -28,7 +28,7 @@ const blocks = story.content.body || [];
 ---
 
 <Layout title={story.name}>
-    <div class="container">
+    <div class="back-container">
         <a
             href="/blog"
             class="back-link"
@@ -68,7 +68,8 @@ const blocks = story.content.body || [];
 </Layout>
 
 <style>
-    article {
+    article,
+    .back-container {
         max-width: 980px;
         margin: 0 auto;
         padding-top: 3rem;
@@ -86,17 +87,8 @@ const blocks = story.content.body || [];
         }
     }
 
-    .container {
-        width: 980px;
-        min-height: max-content;
-        margin: 0 auto;
-        padding: 4rem 2rem 2rem;
-
-        @media screen and (max-width: 768px) {
-            width: 100%;
-            padding: 3rem 0 2rem;
-            height: max-content;
-        }
+    .back-container {
+       padding-bottom: 2rem;
     }
 
     .back-link {
@@ -105,6 +97,6 @@ const blocks = story.content.body || [];
         color: var(--text-color);
         text-decoration: none;
         font-size: 0.9rem;
-        margin: 1rem 2rem 0 2rem
+        margin: 1rem 0 0 0;
     }
 </style>
