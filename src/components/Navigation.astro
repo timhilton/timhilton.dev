@@ -1,6 +1,6 @@
 ---
 import ThemeToggle from "./ThemeToggle.astro";
-const navItems = ["home", "about", "work", "skills", "contact"];
+const navItems = ["home", "about", "work", "skills", "blog", "contact"];
 
 const pathname = new URL(Astro.request.url).pathname;
 const currentPath = pathname === '/' ? 'home' : pathname.slice(1).split('/')[0];
@@ -43,7 +43,7 @@ const currentPath = pathname === '/' ? 'home' : pathname.slice(1).split('/')[0];
 
         @media screen and (max-width: 768px) {
             width: 90vw;
-            font-size: 1.25em;
+            margin-inline-start: 0;
         }
     }
 
@@ -53,6 +53,10 @@ const currentPath = pathname === '/' ? 'home' : pathname.slice(1).split('/')[0];
         list-style: none;
         margin: 0;
         padding: 0;
+
+        @media screen and (max-width: 768px) {
+            justify-content: space-between;
+        }
     }
 
     nav a {

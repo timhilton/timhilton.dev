@@ -1,0 +1,22 @@
+---
+import PostHeader from "./PostHeader.astro";
+import PostCopy from "./PostCopy.astro";
+import PostMedia from "./PostMedia.astro";
+
+const { blok } = Astro.props;
+---
+
+{
+    blok.body?.map((section) => {
+        switch (section.component) {
+            case "post_header":
+                return <PostHeader blok={section} />;
+            case "post_copy":
+                return <PostCopy blok={section} />;
+            case "post_media":
+                return <PostMedia blok={section} />;
+            default:
+                return null;
+        }
+    })
+}

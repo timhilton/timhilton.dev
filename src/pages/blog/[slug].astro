@@ -1,0 +1,102 @@
+---
+import PostHeader from "../../components/storyblok/PostHeader.astro";
+import PostCopy from "../../components/storyblok/PostCopy.astro";
+import PostMedia from "../../components/storyblok/PostMedia.astro";
+import Layout from "../../layouts/Layout.astro";
+
+const { slug } = Astro.params;
+const url = new URL(Astro.request.url);
+const token =
+    url.searchParams.get("token") || import.meta.env.STORYBLOK_API_TOKEN;
+
+console.log("Fetching blog post:", slug);
+console.log("Using token:", token);
+
+const res = await fetch(
+    `https://api-us.storyblok.com/v2/cdn/stories/blog/${slug}?version=draft&token=${token}`,
+);
+
+if (!res.ok) {
+    console.error("Response status:", res.status);
+    const err = await res.text();
+    console.error("Error response:", err);
+    throw new Error("Failed to fetch blog post");
+}
+
+const { story } = await res.json();
+const blocks = story.content.body || [];
+---
+
+<Layout title={story.name}>
+    <div class="back-container">
+        <a
+            href="/blog"
+            class="back-link"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                style="margin-right: 0.5rem;"
+            >
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Back to blog
+        </a>
+    </div>
+
+    <article>
+        {
+            blocks.map((blok) => {
+                if (blok.component === "post_header") {
+                    return <PostHeader blok={blok} />;
+                } else if (blok.component === "post_copy") {
+                    return <PostCopy blok={blok} />;
+                } else if (blok.component === "post_media") {
+                    return <PostMedia blok={blok} />;
+                }
+                return null;
+            })
+        }
+    </article>
+</Layout>
+
+<style>
+    article,
+    .back-container {
+        max-width: 980px;
+        margin: 0 auto;
+        padding-top: 3rem;
+        padding-bottom: 4rem;
+
+        @media screen and (max-width: 1024px) {
+            max-width: 768px;
+            width: 87.5%;
+        }
+
+        @media screen and (max-width: 768px) {
+            max-width: 414px;
+            width: 87.5%;
+            padding-top: 2rem
+        }
+    }
+
+    .back-container {
+       padding-bottom: 2rem;
+    }
+
+    .back-link {
+        display: flex;
+        align-items: center;
+        color: var(--text-color);
+        text-decoration: none;
+        font-size: 0.9rem;
+        margin: 1rem 0 0 0;
+    }
+</style>
