@@ -3,7 +3,7 @@ const { headline, subheadline, date } = Astro.props.blok;
 ---
 
 <header>
-    <h1>{headline}</h1>
+    <h1><span transition:name="article-name">{headline}</span></h1>
     {subheadline && <h2>{subheadline}</h2>}
     {
         date && (
@@ -36,3 +36,4 @@ const { headline, subheadline, date } = Astro.props.blok;
         color: var(--color-secondary);
         font-size: 0.9rem;
     }
+</style>

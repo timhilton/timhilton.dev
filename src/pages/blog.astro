@@ -19,12 +19,12 @@ const title = "Tim Hilton - Blog";
 
 <Layout title={title}>
     <main>
-        <h1>Blog</h1>
+        <h1 transition:name="fullName">Blog</h1>
         <ul>
             {
                 posts.map((post) => (
                     <li>
-                        <a href={`/blog/${post.slug}`}>{post.name}</a>
+                        <a href={`/blog/${post.slug}`} transition:name="article-name">{post.name}</a>
                         <br />
                         <small>
                             {new Date(

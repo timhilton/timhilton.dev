@@ -13,7 +13,7 @@ import { fade } from "astro:transitions";
 				class="content"
 				transition:animate={fade({ duration: "0.4s" })}
 			>
-				<h1 transition:name="fullName">Tim Hilton</h1>
+				<h1><span transition:name="fullName">Tim Hilton</span></h1>
 				<p>crafting frontend experiences for over a decade</p>
 			</div>
 			<div class="image-wrapper" transition:name="image">
