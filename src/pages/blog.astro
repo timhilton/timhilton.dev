@@ -2,10 +2,10 @@
 import Layout from "../layouts/Layout.astro";
 
 const API_TOKEN = import.meta.env.STORYBLOK_API_TOKEN;
-console.log(API_TOKEN);
+const VERSION = import.meta.env.STORYBLOK_VERSION || "draft";
 
 const res = await fetch(
-    `https://api-us.storyblok.com/v2/cdn/stories?token=${API_TOKEN}&starts_with=blog/&version=draft&sort_by=first_published_at:desc`,
+    `https://api-us.storyblok.com/v2/cdn/stories?token=${API_TOKEN}&starts_with=blog/&version=${VERSION}&sort_by=first_published_at:desc`,
 );
 
 if (!res.ok) {
