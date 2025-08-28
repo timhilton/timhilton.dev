@@ -1,5 +1,5 @@
 import { defineConfig } from 'astro/config';
-import netlify from '@astrojs/netlify/functions';
+import netlify from '@astrojs/netlify';
 import react from "@astrojs/react";
 import {storyblok} from '@storyblok/astro';
 
@@ -19,6 +19,12 @@ export default defineConfig({
   vite: {
     define: {
       'import.meta.env.STORYBLOK_API_TOKEN': JSON.stringify(process.env.STORYBLOK_API_TOKEN),
+    },
+    server: {
+      host: true, // 👈 ensures Vite listens on 0.0.0.0 (not just localhost)
+      allowedHosts: process.env.CONTEXT === 'deploy-preview'
+        ? ['netlify.app', 'localhost']
+        : [],
     },
   },
 });
