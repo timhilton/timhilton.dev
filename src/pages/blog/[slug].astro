@@ -4,32 +4,37 @@ import PostCopy from "../../components/storyblok/PostCopy.astro";
 import PostMedia from "../../components/storyblok/PostMedia.astro";
 import Layout from "../../layouts/Layout.astro";
 
-export async function getStaticPaths() {
-    const token = import.meta.env.STORYBLOK_API_TOKEN;
+const { slug } = Astro.params;
+const url = new URL(Astro.request.url);
+const token =
+    url.searchParams.get("token") || import.meta.env.STORYBLOK_API_TOKEN;
 
-    const res = await fetch(
-        `https://api-us.storyblok.com/v2/cdn/stories?starts_with=blog/&version=published&token=${token}`,
-    );
+const version = import.meta.env.STORYBLOK_VERSION || "draft";
 
-    if (!res.ok) {
-        throw new Error(`Failed to fetch Storyblok paths: ${res.status}`);
-    }
+console.log("Fetching blog post:", slug);
+console.log("Using token:", token);
 
-    const { stories } = await res.json();
+const res = await fetch(
+    `https://api-us.storyblok.com/v2/cdn/stories/blog/${slug}?version=${version}&token=${token}`,
+);
 
-    return stories.map((story) => ({
-        params: { slug: story.slug },
-        props: { story }, // pass the story so we don’t fetch again in render
-    }));
+if (!res.ok) {
+    console.error("Response status:", res.status);
+    const err = await res.text();
+    console.error("Error response:", err);
+    throw new Error("Failed to fetch blog post");
 }
 
-const { story } = Astro.props;
+const { story } = await res.json();
 const blocks = story.content.body || [];
 ---
 
 <Layout title={story.name}>
     <div class="back-container">
-        <a href="/blog" class="back-link">
+        <a
+            href="/blog"
+            class="back-link"
+        >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -80,12 +85,12 @@ const blocks = story.content.body || [];
         @media screen and (max-width: 768px) {
             max-width: 414px;
             width: 87.5%;
-            padding-top: 2rem;
+            padding-top: 2rem
         }
     }
 
     .back-container {
-        padding-bottom: 2rem;
+       padding-bottom: 2rem;
     }
 
     .back-link {

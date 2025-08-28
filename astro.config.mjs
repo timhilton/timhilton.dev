@@ -4,7 +4,7 @@ import react from "@astrojs/react";
 import { storyblok } from '@storyblok/astro';
 
 export default defineConfig({
-  output: 'static', // ✅ no server output
+  output: 'server',
   adapter: netlify(),
   integrations: [
     react(),
