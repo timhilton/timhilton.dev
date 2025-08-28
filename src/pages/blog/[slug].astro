@@ -9,11 +9,13 @@ const url = new URL(Astro.request.url);
 const token =
     url.searchParams.get("token") || import.meta.env.STORYBLOK_API_TOKEN;
 
+const version = import.meta.env.STORYBLOK_VERSION || "draft";
+
 console.log("Fetching blog post:", slug);
 console.log("Using token:", token);
 
 const res = await fetch(
-    `https://api-us.storyblok.com/v2/cdn/stories/blog/${slug}?version=draft&token=${token}`,
+    `https://api-us.storyblok.com/v2/cdn/stories/blog/${slug}?version=${version}&token=${token}`,
 );
 
 if (!res.ok) {
