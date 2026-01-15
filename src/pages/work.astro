@@ -3,7 +3,6 @@ import Layout from "../layouts/Layout.astro";
 import PortfolioItem from "../components/PortfolioItem.astro";
 import { getAllProjects } from "../lib/projects";
 
-
 // Load all projects with basic info
 const projects = await getAllProjects();
 
@@ -12,54 +11,55 @@ const title = "Tim Hilton - Work";
 
 <Layout title={title}>
     <section class="container">
-        <h2 transition:name="fullName">Work</h2>
-        <div class="portfolio-grid">
-            {
-                projects.map((project, index) => (
-                    <PortfolioItem
-                        {...project}
-                        index={index}
-                        isProtected={project.isProtected}
-                    />
-                ))
-            }
-        </div>
+        <h2><span transition:name="fullName">Work</span></h2>
+            <div class="portfolio-grid">
+                {
+                    projects.map((project, index) => (
+                        <PortfolioItem
+                            {...project}
+                            index={index}
+                            isProtected={project.isProtected}
+                        />
+                    ))
+                }
+            </div>
+        </h2>
     </section>
+
+    <style>
+        .container {
+            width: 75vw;
+            min-height: max-content;
+            margin: 0 auto;
+            height: calc(100dvh - 48px);
+            padding: 3rem 2rem 2rem;
+
+            @media screen and (max-width: 768px) {
+                padding: 3rem 0 2rem;
+                height: max-content;
+            }
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 24px;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 24px;
+
+            @media screen and (max-width: 768px) {
+                grid-template-columns: 1fr;
+            }
+        }
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
 </Layout>
-
-<style>
-    .container {
-        width: 75vw;
-        min-height: max-content;
-        margin: 0 auto;
-        height: calc(100dvh - 48px);
-        padding: 3rem 2rem 2rem;
-
-        @media screen and (max-width: 768px) {
-            padding: 3rem 0 2rem;
-            height: max-content;
-        }
-    }
-
-    h2 {
-        font-size: 2.5rem;
-        font-weight: bold;
-        margin-bottom: 24px;
-    }
-
-    .portfolio-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 24px;
-
-        @media screen and (max-width: 768px) {
-            grid-template-columns: 1fr;
-        }
-    }
-    @keyframes slideIn {
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
-</style>
