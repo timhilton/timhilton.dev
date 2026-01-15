@@ -9,9 +9,9 @@ interface Props {
   description: string;
   tech: string[];
   role: string;
-  demoUrl: string;
+  demoUrl?: string;
   url?: string;
-  imageUrl: string;
+  imageUrl?: string;
   isProtected: boolean;
   index: number;
   awards: Document;
@@ -124,17 +124,26 @@ const {
                 </div>
               )}
 
-              <video
-                class="scroll"
-                data-speed="1.5"
-                src={demoUrl}
-                autoplay
-                loop
-                muted
-                playsinline
-              >
-                <source src={demoUrl} type="video/mp4" />
-              </video>
+              {demoUrl ? (
+                <video
+                  class="scroll"
+                  data-speed="1.5"
+                  src={demoUrl}
+                  autoplay
+                  loop
+                  muted
+                  playsinline
+                >
+                  <source src={demoUrl} type="video/mp4" />
+                </video>
+              ) : (
+                <img
+                  class="scroll"
+                  src={imageUrl}
+                  alt={`${title} preview`}
+                  loading="lazy"
+                />
+              )}
 
               <div class="actions">
                 {url && (
@@ -405,7 +414,8 @@ const {
     description: string;
     tech: string[];
     role: string;
-    demoUrl: string;
+    demoUrl?: string;
+    imageUrl?: string;
     url?: string;
     error?: string;
     outcome?: string;
@@ -604,21 +614,30 @@ const {
         details.appendChild(outcomeEl);
       }
 
-      const video = document.createElement("video");
-      video.classList.add("scroll");
-      video.setAttribute("data-speed", "1.5");
-      video.setAttribute("src", data.demoUrl);
-      video.setAttribute("autoplay", "true");
-      video.setAttribute("loop", "true");
-      video.setAttribute("muted", "true");
-      video.setAttribute("playsInline", "true");
+      if (data.demoUrl) {
+        const video = document.createElement("video");
+        video.classList.add("scroll");
+        video.setAttribute("data-speed", "1.5");
+        video.setAttribute("src", data.demoUrl);
+        video.setAttribute("autoplay", "true");
+        video.setAttribute("loop", "true");
+        video.setAttribute("muted", "true");
+        video.setAttribute("playsInline", "true");
 
-      const source = document.createElement("source");
-      source.setAttribute("src", data.demoUrl);
-      source.setAttribute("type", "video/mp4");
-      video.appendChild(source);
+        const source = document.createElement("source");
+        source.setAttribute("src", data.demoUrl);
+        source.setAttribute("type", "video/mp4");
+        video.appendChild(source);
 
-      details.appendChild(video);
+        details.appendChild(video);
+      } else if (data.imageUrl) {
+        const img = document.createElement("img");
+        img.classList.add("project-media");
+        img.setAttribute("src", data.imageUrl);
+        img.setAttribute("alt", `${data.title} preview`);
+        img.setAttribute("loading", "lazy");
+        details.appendChild(img);
+      }
 
       if (data.url) {
         const actionEl = document.createElement("div");
