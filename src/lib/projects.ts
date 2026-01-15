@@ -15,6 +15,7 @@ export interface BaseProjectData {
   imageUrl: string;
   isProtected: boolean;
   awards: Document;
+  outcome?: string;
 }
 
 export interface PublicProject extends BaseProjectData {
@@ -42,6 +43,7 @@ interface RawProjectData {
   url?: string;
   imageUrl: string;
   awards: Document;
+  outcome?: string;
 }
 
 interface RawProtectedProjectData extends RawProjectData {
@@ -102,7 +104,8 @@ export async function getAllProjects(): Promise<Project[]> {
       demoUrl: data.demoUrl,
       url: data.url,
       imageUrl: data.imageUrl,
-      awards: data.awards
+      awards: data.awards,
+      outcome: data.outcome
     };
 
     if (isProtectedProject(data)) {
@@ -141,7 +144,8 @@ export async function getProjectData(
       demoUrl: projectData.demoUrl,
       url: projectData.url,
       imageUrl: projectData.imageUrl,
-      awards: projectData.awards
+      awards: projectData.awards,
+      outcome: projectData.outcome
     };
 
     // Check if project is protected
@@ -191,7 +195,8 @@ export async function addProject(
       demoUrl: projectData.demoUrl,
       url: projectData.url,
       imageUrl: projectData.imageUrl,
-      awards: projectData.awards
+      awards: projectData.awards,
+      outcome: projectData.outcome
     };
 
     if (password) {

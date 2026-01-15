@@ -28,6 +28,7 @@ export interface PortfolioFields {
     isProtected: EntryFieldTypes.Boolean
     password: EntryFieldTypes.Text
     awards: EntryFieldTypes.RichText
+    outcome: EntryFieldTypes.Text
   }
 }
 

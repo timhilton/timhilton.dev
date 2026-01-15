@@ -17,6 +17,7 @@ interface ProjectData {
   url?: string;
   imageUrl: string;
   awards: Document;
+  outcome: string;
 }
 
 interface ProtectedProject extends ProjectData {
@@ -53,7 +54,8 @@ async function syncContentfulToJson() {
         imageUrl: string;
         isProtected: boolean;
         password?: string;
-        awards: Document
+        awards: Document;
+        outcome: string;
       };
 
       const projectData: ProjectData = {
@@ -64,7 +66,8 @@ async function syncContentfulToJson() {
         demoUrl: fields.demoUrl ?? '', // Use empty string if missing
         url: fields.url, // Allow undefined
         imageUrl: fields.imageUrl ?? '', // Use empty string if missing
-        awards: fields.awards ?? ''
+        awards: fields.awards ?? '',
+        outcome: fields.outcome ?? ''
       };
 
       const projectId = fields.project.toLowerCase().replace(/\s+/g, '-');

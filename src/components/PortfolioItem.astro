@@ -15,6 +15,7 @@ interface Props {
   isProtected: boolean;
   index: number;
   awards: Document;
+  outcome?: string;
 }
 
 const {
@@ -29,6 +30,7 @@ const {
   index,
   isProtected,
   awards,
+  outcome,
 } = Astro.props;
 ---
 
@@ -98,6 +100,13 @@ const {
                 </div>
               )}
 
+              {outcome && (
+                <div class="outcome">
+                  <h5>Outcome</h5>
+                  <p>{outcome}</p>
+                </div>
+              )}
+
               {tech.length > 0 && (
                 <div class="tech-stack">
                   <h5>Technologies</h5>
@@ -149,230 +158,230 @@ const {
 
 <style>
   .portfolio-wrapper {
-  .portfolio-item {
-    border: 1px solid #8e8d8d;
-    background-color: var(--background-color);
-    border-radius: 16px;
-    padding: 16px;
-    text-align: center;
-    text-decoration: none;
-    color: inherit;
-    opacity: 0;
-    transform: translateX(100px);
-    animation: slideIn 0.3s ease-out forwards;
-    animation-delay: var(--delay, 0s);
-  }
+    .portfolio-item {
+      border: 1px solid #8e8d8d;
+      background-color: var(--background-color);
+      border-radius: 16px;
+      padding: 16px;
+      text-align: center;
+      text-decoration: none;
+      color: inherit;
+      opacity: 0;
+      transform: translateX(100px);
+      animation: slideIn 0.3s ease-out forwards;
+      animation-delay: var(--delay, 0s);
+    }
 
-  .portfolio-item img {
-    max-width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 12px;
-  }
+    .portfolio-item img {
+      max-width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
 
-  .portfolio-item .portfolio-title {
-    margin: 12px 0;
-  }
+    .portfolio-item .portfolio-title {
+      margin: 12px 0;
+    }
 
-  .modal-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 50;
-  }
+    .modal-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 50;
+    }
 
-  .modal-container[data-active="true"] {
-    display: flex;
-  }
+    .modal-container[data-active="true"] {
+      display: flex;
+    }
 
-  .blur-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-  }
+    .blur-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
 
-  .modal {
-    position: relative;
-    display: flex;
-    width: 100vw;
-    height: 100vh;
-    background: var(--background-color);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    overflow: scroll;
-    z-index: 9999;
-    opacity: 0;
-    transform: scale(0.95);
-    transition: all 0.2s ease;
-  }
+    .modal {
+      position: relative;
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      background: var(--background-color);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      overflow: scroll;
+      z-index: 9999;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: all 0.2s ease;
+    }
 
-  .modal-container[data-active="true"] .modal {
-    opacity: 1;
-    transform: scale(1);
-  }
+    .modal-container[data-active="true"] .modal {
+      opacity: 1;
+      transform: scale(1);
+    }
 
-  .modal-content {
-    /* max-height: 90vh;
+    .modal-content {
+      /* max-height: 90vh;
     overflow-y: auto; */
-    padding: 3rem;
-    display: flex;
-    position: relative;
-    width: 100%;
-    height: max-content;
-    min-height: 100dvh;
+      padding: 3rem;
+      display: flex;
+      position: relative;
+      width: 100%;
+      height: max-content;
+      min-height: 100dvh;
 
-    @media screen and (max-width: 768px) {
-      padding: 3rem 0 5rem;
+      @media screen and (max-width: 768px) {
+        padding: 3rem 0 5rem;
+      }
     }
-  }
-  .close-button {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    padding: 0.5rem;
-    border-radius: 50%;
-    border: none;
-    background: none;
-    cursor: pointer;
-    line-height: 0;
-    transition: background-color 0.2s ease;
+    .close-button {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.5rem;
+      border-radius: 50%;
+      border: none;
+      background: none;
+      cursor: pointer;
+      line-height: 0;
+      transition: background-color 0.2s ease;
 
-    svg {
-      stroke: var(--text-color);
+      svg {
+        stroke: var(--text-color);
+      }
     }
-  }
 
-  .close-button:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-  }
+    .close-button:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
 
-  .password-form {
-    text-align: center;
-    align-self: center;
-    margin: 0 auto;
-  }
+    .password-form {
+      text-align: center;
+      align-self: center;
+      margin: 0 auto;
+    }
 
-  .password-input-group {
-    display: flex;
-    gap: 0.5rem;
-    margin: 1rem 0;
-  }
+    .password-input-group {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
 
-  .password-input {
-    flex: 1;
-    padding: 0.5rem;
-    border: 1px solid var(--text-color);
-    border-radius: 0.5rem;
-    background: var(--bg-color);
-    color: var(--text-color);
-  }
+    .password-input {
+      flex: 1;
+      padding: 0.5rem;
+      border: 1px solid var(--text-color);
+      border-radius: 0.5rem;
+      background: var(--bg-color);
+      color: var(--text-color);
+    }
 
-  .error-message {
-    color: #dc2626;
-    font-size: 0.875rem;
-    margin-top: 0.5rem;
-  }
+    .error-message {
+      color: #dc2626;
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+    }
 
-  .project-details {
-    position: relative;
-    width: 75%;
-    margin: 0 auto;
+    .project-details {
+      position: relative;
+      width: 75%;
+      margin: 0 auto;
 
-    @media screen and (max-width: 768px) {
+      @media screen and (max-width: 768px) {
+        width: 100%;
+      }
+    }
+    .tech-stack,
+    .role {
+      margin: 1.5rem 0;
+    }
+
+    .role {
+      margin-bottom: 1.5rem;
+
+      p {
+        margin: 0;
+      }
+    }
+
+    .tech-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .tech-tag {
+      background: #8e8d8d;
+      color: var(--bg-color);
+      padding: 0.25rem 0.75rem;
+      border-radius: 1rem;
+      font-size: 0.875rem;
+    }
+
+    .actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    h2,
+    .description,
+    .tech-stack,
+    .role,
+    .actions,
+    .awards {
+      @media screen and (max-width: 768px) {
+        padding: 0 3rem 0;
+      }
+    }
+
+    video {
       width: 100%;
     }
-  }
-  .tech-stack,
-  .role {
-    margin: 1.5rem 0;
-  }
 
-  .role {
-    margin-bottom: 1.5rem;
+    .awards {
+      margin-bottom: 1.5rem;
 
-    p {
-      margin: 0;
-    }
-  }
+      ul,
+      p {
+        margin: 0;
+        padding: 0;
+      }
 
-  .tech-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-  }
+      a {
+        position: relative;
+        color: var(--text-color);
+        text-decoration: none;
+      }
+      a::after {
+        content: "→";
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%) rotate(-45deg);
+        color: currentColor;
+        transition: transform 0.3s ease;
+        margin-inline-start: 5px;
+      }
 
-  .tech-tag {
-    background: #8e8d8d;
-    color: var(--bg-color);
-    padding: 0.25rem 0.75rem;
-    border-radius: 1rem;
-    font-size: 0.875rem;
-  }
-
-  .actions {
-    display: flex;
-    gap: 1rem;
-    margin-top: 2rem;
-  }
-
-  h2,
-  .description,
-  .tech-stack,
-  .role,
-  .actions,
-  .awards {
-    @media screen and (max-width: 768px) {
-      padding: 0 3rem 0;
-    }
-  }
-
-  video {
-    width: 100%;
-  }
-
-  .awards {
-    margin-bottom: 1.5rem;
-
-    ul,
-    p {
-      margin: 0;
-      padding: 0;
+      a:hover {
+        text-decoration: underline;
+      }
     }
 
-    a {
-      position: relative;
-      color: var(--text-color);
-      text-decoration: none;
-    }
-    a::after {
-      content: "→";
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%) rotate(-45deg);
-      color: currentColor;
-      transition: transform 0.3s ease;
-      margin-inline-start: 5px;
-    }
-
-    a:hover {
-      text-decoration: underline;
+    h5 {
+      margin-bottom: 1em;
     }
   }
-
-  h5 {
-    margin-bottom: 1em;
-  }
-}
 </style>
 
 <script>
@@ -399,6 +408,7 @@ const {
     demoUrl: string;
     url?: string;
     error?: string;
+    outcome?: string;
   }
 
   document.addEventListener("astro:page-load", () => {
@@ -578,6 +588,21 @@ const {
       roleContent.textContent = data.role;
       roleEl.appendChild(roleContent);
       details.appendChild(roleEl);
+
+      if (data.outcome) {
+        const outcomeEl = document.createElement("div");
+        outcomeEl.classList.add("outcome");
+
+        const outcomeHeading = document.createElement("h5");
+        outcomeHeading.textContent = "Outcome";
+        outcomeEl.appendChild(outcomeHeading);
+
+        const outcomeContent = document.createElement("p");
+        outcomeContent.textContent = data.outcome;
+        outcomeEl.appendChild(outcomeContent);
+
+        details.appendChild(outcomeEl);
+      }
 
       const video = document.createElement("video");
       video.classList.add("scroll");
