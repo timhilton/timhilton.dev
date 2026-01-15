@@ -1,6 +1,6 @@
 ---
 import ThemeToggle from "./ThemeToggle.astro";
-const navItems = ["home", "about", "work", "skills", "blog", "contact"];
+const navItems = ["home", "about", "work", "skills", "contact"];
 
 const pathname = new URL(Astro.request.url).pathname;
 const currentPath = pathname === '/' ? 'home' : pathname.slice(1).split('/')[0];
