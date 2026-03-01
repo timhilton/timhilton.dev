@@ -15,7 +15,8 @@ const icons = [
     {
         name: 'spotify',
         link: 'https://open.spotify.com/user/timhilton79?si=b43fa44a6b2a4352',
-        aria: 'link to spotify, opens in new tab for you to rock out!'
+        aria: 'link to spotify, opens in new tab for you to rock out!',
+        tooltip: "What I'm listening to"
     }
 ]
 ---
@@ -53,6 +54,30 @@ const icons = [
         height: 36px;
     }
 
+    .has-tooltip {
+        position: relative;
+    }
+
+    .has-tooltip::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: calc(100% + 8px);
+        right: 0;
+        background: var(--text-color);
+        color: var(--background-color);
+        font-size: 0.75rem;
+        white-space: nowrap;
+        padding: 4px 8px;
+        border-radius: 4px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+
+    .has-tooltip:hover::after {
+        opacity: 1;
+    }
+
     .footer-content {
         display: flex;
         align-items: center;
@@ -72,7 +97,11 @@ const icons = [
     <div class="footer-content">
         <p>&#169; {new Date().getFullYear()} Tim Hilton</p>
         <div class="social">
-            {icons.map((icon) => <a href={icon.link} target="_blank" rel="noopener noreferrer" aria-label={icon.aria}><Icon icon={icon.name}/></a>)}
+            {icons.map((icon) => (
+                <a href={icon.link} target="_blank" rel="noopener noreferrer" aria-label={icon.aria} class={icon.tooltip ? 'has-tooltip' : ''} data-tooltip={icon.tooltip}>
+                    <Icon icon={icon.name}/>
+                </a>
+            ))}
         </div>
     </div>
 </footer>
