@@ -11,7 +11,7 @@ const title = "Tim Hilton - Work";
 
 <Layout title={title}>
     <section class="container">
-        <h2><span transition:name="fullName">Work</span></h2>
+        <h1><span transition:name="fullName">Work</span></h1>
             <div class="portfolio-grid">
                 {
                     projects.map((project, index) => (
@@ -23,7 +23,6 @@ const title = "Tim Hilton - Work";
                     ))
                 }
             </div>
-        </h2>
     </section>
 
     <style>
@@ -40,7 +39,7 @@ const title = "Tim Hilton - Work";
             }
         }
 
-        h2 {
+        h1 {
             font-size: 2.5rem;
             font-weight: bold;
             margin-bottom: 24px;

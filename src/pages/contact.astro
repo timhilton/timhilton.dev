@@ -9,7 +9,7 @@ const title = "Tim Hilton - Contact";
 
 <Layout title={title}>
     <section transition:animate="slide">
-        <h2 transition:name="fullName">Contact Me</h2>
+        <h1><span transition:name="fullName">Contact Me</span></h1>
         <form name="contact" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
             <input type="text" name="name" />
             <input type="email" name="email" />
@@ -28,7 +28,7 @@ const title = "Tim Hilton - Contact";
         justify-content: center;
         flex-direction: column;
     }
-    h2 {
+    h1 {
         font-size: 2.5rem;
         font-weight: bold;
         margin: 48px auto 0;

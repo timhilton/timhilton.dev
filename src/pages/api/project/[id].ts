@@ -2,14 +2,10 @@ import type { APIRoute } from 'astro';
 import { getProjectData } from '../../../lib/projects';
 
 export const POST: APIRoute = async ({ params, request }) => {
-  console.log('API route called with params:', params);
-
   try {
     const { id } = params;
 
-    // Log the raw request body
     const rawBody = await request.text();
-    console.log('Raw request body:', rawBody);
 
     // Parse the body manually
     let password;
@@ -29,8 +25,6 @@ export const POST: APIRoute = async ({ params, request }) => {
       });
     }
 
-    console.log('Processing request for project:', id);
-
     if (!id) {
       console.error('No project ID provided');
       return new Response(JSON.stringify({ error: 'Project ID is required' }), {
@@ -42,7 +36,6 @@ export const POST: APIRoute = async ({ params, request }) => {
     }
 
     const projectData = await getProjectData(id, password);
-    console.log('Project data retrieved:', projectData ? 'success' : 'not found');
 
     if (!projectData) {
       return new Response(JSON.stringify({ error: 'Project not found' }), {

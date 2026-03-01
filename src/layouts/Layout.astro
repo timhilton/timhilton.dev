@@ -14,7 +14,7 @@ interface Props {
 const {
 	title = "Tim Hilton",
 	description = "Web Engineering Leader & Builder.",
-	image = "../images/og-image.png",
+	image = "https://timhilton.dev/og-image.png",
 	url = "https://timhilton.dev",
 } = Astro.props;
 ---
@@ -26,7 +26,7 @@ const {
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>{title}</title>
 		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
-		<meta name="robots" content="noindex, nofollow" />
+		<meta name="robots" content="index, follow" />
 		<!-- Open Graph -->
 		<meta property="og:type" content="website" />
 		<meta property="og:title" content={title} />
@@ -98,4 +98,5 @@ const {
 			font-size: 1.5em;
 		}
 	}
+
 </style>

@@ -39,9 +39,7 @@ export default function Contact() {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: encode({ "form-name": "contact", ...formData })
-        })
-            .then(() => console.log("Success!"))
-            .catch(error => console.log(error));
+        });
 
         setSubmitted(true);
     };

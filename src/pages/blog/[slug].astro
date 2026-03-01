@@ -11,9 +11,6 @@ const token =
 
 const version = import.meta.env.STORYBLOK_VERSION || "draft";
 
-console.log("Fetching blog post:", slug);
-console.log("Using token:", token);
-
 const res = await fetch(
     `https://api-us.storyblok.com/v2/cdn/stories/blog/${slug}?version=${version}&token=${token}`,
 );

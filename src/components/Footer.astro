@@ -72,7 +72,7 @@ const icons = [
     <div class="footer-content">
         <p>&#169; {new Date().getFullYear()} Tim Hilton</p>
         <div class="social">
-            {icons.map((icon) => <a href={icon.link} target="_blank" aria-label={icon.aria}><Icon icon={icon.name}/></a>)}
+            {icons.map((icon) => <a href={icon.link} target="_blank" rel="noopener noreferrer" aria-label={icon.aria}><Icon icon={icon.name}/></a>)}
         </div>
     </div>
 </footer>
